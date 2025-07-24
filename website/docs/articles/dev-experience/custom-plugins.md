@@ -1,6 +1,6 @@
 # Custom Plugins
 
-OpenPanel version 1.5.0 nad newer support custom plugins.
+OpenPanel versions +1.5.0 support custom plugins.
 
 ## Requirements
 
