@@ -6,7 +6,7 @@
 # Example: opencli plan-edit --debug id=1 name="New Plan" description="This is a new plan" emails=100 ftp=50 domains=20 websites=30 disk=100 inodes=100000 databases=10 cpu=4 ram=8 bandwidth=100 feature_set="default" max_email_quota="2G"
 # Author: Radovan Jecmenica
 # Created: 10.04.2024
-# Last Modified: 09.02.2026
+# Last Modified: 10.02.2026
 # Company: openpanel.com
 # Copyright (c) openpanel.com
 # 
@@ -209,7 +209,7 @@ fi
 
 
 
-local sql="UPDATE plans SET name='$new_plan_name', description='$description', ftp_limit=$ftp_limit, email_limit=$emails_limit, domains_limit=$domains_limit, websites_limit=$websites_limit, disk_limit='$disk_limit', inodes_limit=$inodes_limit, db_limit=$db_limit, cpu=$cpu, ram='$ram', bandwidth=$bandwidth, feature_set='$feature_set' max_email_quota='$max_email_quota' WHERE id='$plan_id';"
+local sql="UPDATE plans SET name='$new_plan_name', description='$description', ftp_limit=$ftp_limit, email_limit=$emails_limit, domains_limit=$domains_limit, websites_limit=$websites_limit, disk_limit='$disk_limit', inodes_limit=$inodes_limit, db_limit=$db_limit, cpu=$cpu, ram='$ram', bandwidth=$bandwidth, feature_set='$feature_set', max_email_quota='$max_email_quota' WHERE id='$plan_id';"
 mysql --defaults-extra-file=$config_file -D "$mysql_database" -e "$sql"
   if [ $? -eq 0 ]; then
     local sql="SELECT name FROM plans WHERE id='$plan_id'"
