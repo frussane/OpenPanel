@@ -41,6 +41,38 @@ opencli locale sr-sr tr-tr zh-cn
   </TabItem>
 </Tabs>
 
+
+## Default Locale
+
+
+<Tabs>
+  <TabItem value="openadmin-default-locale" label="With OpenAdmin" default>
+
+To make a specific locale the default, go to **OpenAdmin > Settings > Locales** and click the **Set Default** button next to the desired locale.
+
+  </TabItem>
+  <TabItem value="CLI-default-locale" label="From Terminal">
+
+To set a default locale from the terminal:
+
+```bash
+echo <LOCALE_HERE> > /etc/openpanel/openpanel/default_locale
+```
+
+Example: Set Turkish as the default:
+
+```bash
+echo tr > /etc/openpanel/openpanel/default_locale
+```
+
+  </TabItem>
+</Tabs>
+
+:::info
+Changing the default will **not** automatically update existing users’ settings; their browser preferences and account configurations will take precedence.
+For more details, see [How-to Guides > Setting the Default Locale](/docs/articles/accounts/default-user-locales/#setting-the-default-locale).
+:::
+
 ## Edit Locale
 
 To edit a locale, click the GitHub icon next to it in the table. This opens the source on GitHub, where you can fork the repository and edit the translation file.

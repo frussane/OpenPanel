@@ -14,6 +14,9 @@ Hosting plans set limits for users.
 
 To list existing plans navigate to Plans page:
 
+![openadmin plans](/img/admin/tremor/plans_list.png)
+
+
 | Field              | Description                                                               |
 | ------------------ | ------------------------------------------------------------------------- |
 | **Plan Name**      | Display name that users will see in their OpenPanel dashboards.            |
@@ -26,6 +29,7 @@ To list existing plans navigate to Plans page:
 | **Websites** | Total number of websites (WordPress, NodeJS, Python) per user on the plan.   |
 | **Databases** | Total number of MySQL/MariaDB databases allowed per user on the plan.              |
 | **Email accounts** | Total number of email accounts that user can create on the plan.              |
+| **Mailbox quota** | Max mailbox size for email accounts that user can set on this plan.              |
 | **FTP accounts** | Total number of ftp accounts that user can create on the plan.             |
 | **Feature Set** | [Feature Sets](/docs/admin/settings/openpanel/#enable-features) determine which pages users can access from the OpenPanel interface.               |
 
@@ -43,14 +47,12 @@ opencli plan-list
 Example output:
 ```bash
 [root@fajlovi ~]# opencli plan-list
-+----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+
-| id | name           | description            | domains_limit | websites_limit | email_limit | ftp_limit | disk_limit | inodes_limit | db_limit | cpu  | ram  | bandwidth | feature_set |
-+----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+
-|  1 | Standard plan  | Small plan for testing |             0 |             10 |           0 |         0 | 5 GB       |      1000000 |        0 | 2    | 2g   |        10 | default     |
-|  2 | Developer Plus | 4 cores, 6G ram        |             0 |             10 |           0 |         0 | 10 GB      |      1000000 |        0 | 2    | 3g   |       100 | proba       |
-|  3 | unlimited      | unlimited              |             0 |              0 |           0 |         0 | 100 GB     |       250000 |        0 | 2    | 3g   |         0 | default     |
-|  4 | unlimited2     | fdfsd                  |             0 |              0 |           0 |         0 | 0 GB       |            0 |        0 | 0    | 0g   |         0 | proba       |
-+----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+
++----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+-----------------+
+| id | name           | description            | domains_limit | websites_limit | email_limit | ftp_limit | disk_limit | inodes_limit | db_limit | cpu  | ram  | bandwidth | feature_set | max_email_quota |
++----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+-----------------+
+|  1 | Standard plan  | Small plan for testing |             0 |             10 |           0 |         0 | 5 GB       |      1000000 |        0 | 2    | 2g   |        10 | basic       | 0               |
+|  2 | Developer Plus | 4 cores, 6G ram        |             0 |             10 |           0 |         0 | 20 GB      |      2500000 |        0 | 4    | 6g   |       100 | default     | 0               |
++----+----------------+------------------------+---------------+----------------+-------------+-----------+------------+--------------+----------+------+------+-----------+-------------+-----------------+
 
 ```
 
@@ -70,6 +72,9 @@ opencli plan-list --json
 
 To create a new hosting package, click the **'Create New'** button and configure the desired limits:
 
+![openadmin plans create](/img/admin/tremor/plans_create.png)
+
+
 * **Name** – Can include any characters.
 * **Description** – Internal note for admins, visible only in OpenAdmin.
 * **Disk** – Storage in GB. Use `0` for unlimited.
@@ -81,6 +86,7 @@ To create a new hosting package, click the **'Create New'** button and configure
 * **Websites** – Max number of websites in Site Manager (WordPress, WebsiteBuilder, NodeJS/Python). Use `0` for unlimited.
 * **FTP accounts** – Max number of FTP sub-accounts. Use `0` for unlimited.
 * **Email accounts** – Max number of email sub-accounts. Use `0` for unlimited.
+* **Mailbox quota** – Max mailbox size for email accounts that user can set on this plan.
 * **Feature Set** – Name of the feature set that defines available services in the OpenPanel UI.
 
 
@@ -90,12 +96,12 @@ To create a new hosting package, click the **'Create New'** button and configure
 To create a new plan run the following command:
 
 ```bash
-opencli plan-create 'name' 'description' email_limit ftp_limit domains_limit websites_limit disk_limit inodes_limit db_limit cpu ram bandwidth feature_set
+opencli plan-create name"<TEXT>" description="<TEXT>" emails=<COUNT> ftp=<COUNT> domains=<COUNT> websites=<COUNT> disk=<COUNT> inodes=<COUNT> databases=<COUNT> cpu=<COUNT> ram=<COUNT> bandwidth=<COUNT> feature_set=<NAME> max_email_quota=<COUNT>
 ```
 
 Example:
 ```bash
-opencli plan-create Another Plan' 'this plan is used for X' 0 0 10 10 50 1000000 25 2 4 100 'default'
+opencli plan-create name=New Plan description=This is a new plan emails=100 ftp=50 domains=20 websites=30 disk=100 inodes=100000 databases=10 cpu=4 ram=8 bandwidth=100 feature_set=default max_email_quota=2G
 ```
 
   </TabItem>
@@ -106,6 +112,11 @@ opencli plan-create Another Plan' 'this plan is used for X' 0 0 10 10 50 1000000
 
 To change plan limits click on the **Edit** button for the plan in **OpenAdmin > User Packages** and set the new limits.
 
+![openadmin plans edit](/img/admin/tremor/plans_edit_1.png)
+
+![openadmin plans edit limits](/img/admin/tremor/plans_edit_2.png)
+
+
 The new limits will be applied immediately to all accounts using the package.
 
 ## List Users on Plan
@@ -114,6 +125,10 @@ The new limits will be applied immediately to all accounts using the package.
   <TabItem value="openadmin-plan-usage" label="With OpenAdmin" default>
 
 To view all users that are currently using a hosting package, simply sort the users table by that package name, or in the search field type the package name.
+
+![openadmin plans usage](/img/admin/tremor/plans_usage_1.png)
+
+![openadmin plans usage](/img/admin/tremor/plans_usage_2.png)
 
   </TabItem>
   <TabItem value="CLI-plan-usage" label="With OpenCLI">
@@ -148,7 +163,10 @@ opencli plan-usage --json
 <Tabs>
   <TabItem value="openadmin-plan-delete" label="With OpenAdmin" default>
     
-To delete a hosting package click on the **Delete** button next to the package name.
+To delete a hosting package click on the **Delete** link for the desired package.
+
+![openadmin plans delete](/img/admin/tremor/plans_delete.png)
+
 
   </TabItem>
   <TabItem value="CLI-plan-delete" label="With OpenCLI">

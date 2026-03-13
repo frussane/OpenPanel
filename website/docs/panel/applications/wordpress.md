@@ -135,7 +135,7 @@ Cache widget displays the current [wp cache type](https://developer.wordpress.or
 
 If CorazaWAF is enabled on the server, and your account has access to the WAF feature, you will see a *Firewall* widget displaying current status for the domain, an option to change it and number of denied/challenged requests in the last hour.
 
-![wp_waf](/img/panel/v2/wp-waf.png)
+![wp_waf](/img/panel/v2/wp_waf.png)
 
 
 ### Overview
@@ -205,12 +205,22 @@ Create and restore backups anytime — files, database, or both.
 
 Create a Backup:
 - Choose what to back up (files, database, or both).
-- Click *Generate Backup**.
+- Click **Generate Backup**.
 
 ![wp_manager_site_backup_1.png](/img/panel/v2/wpbackup.png)
 
 Restore a Backup:
 To restore, click Restore, pick a backup date, and confirm.
+
+### Clone
+
+Create a clone (copy files and database tables, replace links in database, fluch wp cache and rewrite rules).
+
+Create a clone:
+- Under 'Target' select the desired domain and optionally 'Database' to be used.
+- Click **Clone Website**.
+
+![wp_manager_site_clone.png](/img/panel/v2/wp_clone.png)
 
 ### Remove
 

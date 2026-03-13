@@ -8,7 +8,10 @@ The Account Activity page provides a log record of all your actions performed on
 
 ![account_activity_log.png](/img/panel/v2/activity.png)
 
-Logged Activities Include:
+
+## Recorded actions:
+
+The OpenPanel interface records the following account activities:
 
 * Added item to favorites
 * Removed item from favorites
@@ -16,6 +19,7 @@ Logged Activities Include:
 * Email address changed
 * Username changed
 * Forgot password requested (via email)
+* Password reset (via email)
 * Logged in with password
 * Logged in using 2FA code
 * Logged in via API call

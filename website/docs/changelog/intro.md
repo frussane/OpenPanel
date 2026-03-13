@@ -4,18 +4,33 @@
 
 | Version| Release date | 
 |---|---|
-|__[1.6.8](/docs/changelog/1.6.8)__| November 25, 2025 |
+|__[1.7.47](/docs/changelog/1.7.47)__| April 01, 2026 |
+|__[1.8.0](/docs/changelog/1.8.0)__| April 08, 2026 |
+|__[1.7.48](/docs/changelog/1.7.48)__| April 15, 2026 |
 
 ### Latest
 
 | Version| Release date | 
 |---|---|
-|__[1.6.7](/docs/changelog/1.6.7)__| November 05, 2025 |
+|__[1.7.46](/docs/changelog/1.7.46)__| March 11, 2026 |
 
 ### Previous versions
 
 | Version| Release date | 
 |---|---|
+|__[1.7.45](/docs/changelog/1.7.45)__| March 06, 2026 |
+|__[1.7.44](/docs/changelog/1.7.44)__| February 25, 2026 |
+|__[1.7.43](/docs/changelog/1.7.43)__| February 14, 2026 |
+|__[1.7.42](/docs/changelog/1.7.42)__| February 09, 2026 |
+|__[1.7.41](/docs/changelog/1.7.41)__| January 29, 2026 |
+|__[1.7.4](/docs/changelog/1.7.4)__| December 30, 2025 |
+|__[1.7.3](/docs/changelog/1.7.3)__| December 25, 2025 |
+|__[1.7.2](/docs/changelog/1.7.2)__| December 02, 2025 |
+|__[1.7.1](/docs/changelog/1.7.1)__| November 25, 2025 |
+|__[1.7.0](/docs/changelog/1.7.0)__| November 20, 2025 |
+|__[1.6.9](/docs/changelog/1.6.9)__| November 16, 2025 |
+|__[1.6.8](/docs/changelog/1.6.8)__| November 14, 2025 |
+|__[1.6.7](/docs/changelog/1.6.7)__| November 05, 2025 |
 |__[1.6.6](/docs/changelog/1.6.6)__| October 29, 2025 |
 |__[1.6.5](/docs/changelog/1.6.5)__| October 24, 2025 |
 |__[1.6.4](/docs/changelog/1.6.4)__| October 23, 2025 |

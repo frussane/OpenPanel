@@ -23,6 +23,7 @@ sidebar_position: 1
 - [How to Install WordPress® With OpenPanel](/docs/articles/websites/how-to-install-wordpress-with-openpanel/)
 - [Hosting a PHP Website with OpenPanel](/docs/articles/websites/hosting-a-php-website-with-openpanel/)
 - [How to Migrate a WordPress® Installation to OpenPanel](/docs/articles/websites/how-to-upload-wordpress-website-to-openpanel)
+- [How to install a PHP extension in OpenPanel](/docs/articles/websites/how-to-install-php-extensions-in-openpanel)
 - [Connecting to MySQL Server from Applications in OpenPanel](/docs/articles/databases/how-to-connect-to-mysql-from-php-applications-in-openpanel/)
 - [How to set or increase PHP INI memory_limit or other values?](/docs/articles/websites/how-to-set-or-increase-PHP-INI-memory-limit-or-other-values/)
 - [403 Error Troubleshooting Guide](/docs/articles/domains/error-on-website-disable-coraza-waf/)
@@ -45,27 +46,35 @@ sidebar_position: 1
 - [Branding and White-Label](/docs/articles/dev-experience/customizing-openpanel-user-interface/)
 - [Add a Custom Message for OpenPanel User](/docs/articles/accounts/how-to-add-custom-message-in-openpanel/)
 - [Add Custom section with icons in Dashboard](/docs/articles/dev-experience/add-custom-icons-in-openpanel-dashboard/)
+- [Troubleshooting OpenPanel UI Errors](/docs/articles/support/how-to-troubleshoot-openpanel-error)
+- [Troubleshooting OpenAdmin UI Errors](/docs/articles/support/how-to-troubleshoot-openadmin-error)
 
 # Enterprise
 - [OpenPanel Pricing](/docs/articles/license/pricing/)
 - [Upgrading to OpenPanel Enterprise and activating License](/docs/articles/license/upgrade_to_openpanel_enterprise_and-activate_license/)
+- [Downgrading from OpenPanel Enterprise to Community edition](/docs/articles/license/how_to_downgrade_openpanel_license/)
+- [How Enterprise license expiration affects OpenPanel](/docs/articles/license/what_happens_when_openpanel_enterprise_license_expires/)
 - [Licenses for educational or non-profit organizations](/docs/articles/license/openpanel_enterprise_for_nonprofits/)
 
 # Domains
 - [Domain Shows Default Page](/docs/articles/domains/domain-shows-default-page/)
 - [How to configure Nameservers](/docs/articles/domains/how-to-configure-nameservers-in-openpanel)
 - [How to configure a DNS Cluster](/docs/articles/domains/how-to-setup-dns-cluster-in-openpanel)
+- [How to Enable HSTS on a Domain in OpenPanel](/docs/articles/domains/how-to-enable-hsts-on-a-domain-in-openpanel)
 - [Troubleshooting DNS](/docs/articles/domains/troubleshooting-dns)
 - [Troubleshooting Caddy Webserver](/docs/articles/docker/troubleshooting-caddy-webserver)
 
 
 # Files
 - [How to configure FTP server](/docs/articles/user-experience/how-to-setup-ftp-in-openpanel/)
+- [How to configure TLS for the FTP server](/docs/articles/user-experience/how-to-setup-tls-ftp-in-openpanel/)
 
 # Security
 - [Configuring ImunifyAV](/docs/articles/security/setup-imunifyav/)
 - [Rate-limiting access to OpenPanel or OpenAdmin](/docs/articles/dev-experience/rate_limiting_for_openpanel/)
 - [Restrict access to OpenAdmin](/docs/articles/dev-experience/limit_access_to_openadmin/)
+- [Disable the Terminal feature in OpenAdmin](/docs/articles/dev-experience/disable-openadmin-web-terminal/)
+- [Disable the Server Reboot feature in OpenAdmin](/docs/articles/dev-experience/disable-openadmin-server-reboot/)
 - [Limiting Connections with CSF](/docs/articles/security/how-to-limit-connections-csf)
 - [CSF Blocklists](/docs/articles/security/csf-blocklists/)
 

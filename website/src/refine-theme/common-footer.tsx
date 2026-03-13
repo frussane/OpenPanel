@@ -36,9 +36,9 @@ export const CommonFooter = () => {
                         "no-underline",
                     )}
                 >
-                    Stefan Pejcic
+                    OpenPanel
                 </a>
-                    © {`2023–${currentYear}`}
+                     © {`2023–${currentYear}`}
                 </div>
 
                 <div

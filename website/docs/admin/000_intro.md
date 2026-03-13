@@ -18,11 +18,11 @@ Minimum Requirements:
 Supported operating systems:
 - **Ubuntu 24.04** (recommended)
 - **Debian 10, 11, 12, 13**
-- **AlmaLinux 9.5 and 10** (recommended for ARM CPU)
+- **AlmaLinux 9.5 and 10** (9.5 is recommended for ARM CPU, 10 has a known issue [#744](https://github.com/stefanpejcic/OpenPanel/issues/744))
 - **RockyLinux 9.6, 10**
 - **CentOS 9.5**
 
-*Docker needs iptables, so on AlmaLinux 10 and RockyLinux 10, you must switch from `nftables` to `iptables`. See [#1472](https://github.com/docker/for-linux/issues/1472) and [#745](https://github.com/stefanpejcic/OpenPanel/issues/745#issuecomment-3451272947).
+On AlmaLinux 10 and RockyLinux 10, you must switch from `nftables` to `iptables`. See [#1472](https://github.com/docker/for-linux/issues/1472) and [#745](https://github.com/stefanpejcic/OpenPanel/issues/745#issuecomment-3451272947).
 
 :::info
 If you are using external firewall, the following ports should be opened:  `25` `53` `80` `443` `465` `993` `2083` `2087` `32768:60999`
@@ -78,9 +78,10 @@ If you encountered any errors while running the installation script, please copy
 ## Post Install Steps
 
 Recommended steps after installing OpenPanel:
-- [Access the Admin panel](/docs/articles/dev-experience/how-to-access-openadmin)
+- [Access the OpenAdmin panel](/docs/articles/dev-experience/how-to-access-openadmin)
 - [Configure Domain and SSL for OpenPanel](/docs/admin/settings/general/#set-domain-for-openpanel)
-- [Configure Custom Nameservers](/docs/admin/settings/openpanel/#set-nameservers)
+- [Enable Modules (features) in OpenPanel UI](/docs/admin/settings/modules/)
+- [Configure Custom Nameservers](/docs/articles/domains/how-to-configure-nameservers-in-openpanel/)
 - [Create Hosting Packages](/docs/admin/plans/hosting_plans#create-a-plan)
 - [Create New User Accounts](/docs/admin/accounts/users/#create-users)
 - [Set Email address to receive Alerts](/docs/admin/notifications/#email-alerts)

@@ -30,11 +30,10 @@ export const RefineWeekMobile = ({ variant, data, className }: Props) => {
                     "py-10 sm:py-20",
                 )}
             >
-                <RefineLogoIcon /> refine-logo
+                <RefineLogoIcon />
                 <span className={clsx("text-gray-500 dark:text-gray-400")}>
-                    with
+                        Enterprise
                 </span>
-                <Logo />
             </div>
 
             <div
@@ -52,8 +51,8 @@ export const RefineWeekMobile = ({ variant, data, className }: Props) => {
                         "rounded-[4px]",
                         "z-[1]",
                     )}
-                    src={`https://refine.ams3.cdn.digitaloceanspaces.com/website/static${data.cover}`}
-                    srcSet={`https://refine.ams3.cdn.digitaloceanspaces.com/website/static${data.cover2x}`}
+                    src={`${data.cover}`}
+                    srcSet={`${data.cover2x}`}
                     alt={data.coverAlt}
                 />
             </div>
@@ -158,18 +157,6 @@ export const RefineWeekMobile = ({ variant, data, className }: Props) => {
                                                     variant === "strapi",
                                             },
                                         )}
-                                    />
-                                    <img
-                                        className={clsx(
-                                            "z-[1]",
-                                            "p-0 m-0",
-                                            "h-[208px] sm:h-[365px]",
-                                            "object-cover",
-                                            "rounded-[4px]",
-                                        )}
-                                        src={`https://refine.ams3.cdn.digitaloceanspaces.com/website/static${item.image}`}
-                                        srcSet={`https://refine.ams3.cdn.digitaloceanspaces.com/website/static${item.image2x}`}
-                                        alt={item.title}
                                     />
                                 </div>
                                 <div

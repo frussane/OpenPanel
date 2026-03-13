@@ -42,6 +42,33 @@ const providers = [
     link: "https://altushost.com",
     logo: "https://www.altushost.com/wp-content/themes/altushost/themeFunctions/media/altushost.svg",
   }, 
+  {
+    company: "Clouding.io",
+    location: "EU",
+    services: "VPS",
+    managedSupport: "No",
+    freeEnterprise: "No",
+    link: "https://clouding.io",
+    logo: "/img/svg/clouding.io-svg-logo.png",
+  },  
+  {
+    company: "Astral Internet",
+    location: "Canada",
+    services: "VPS",
+    managedSupport: "No",
+    freeEnterprise: "No",
+    link: "https://www.astralinternet.com",
+    logo: "https://www.astralinternet.com/wp-content/uploads/2024/06/astral-logocompact-dark.svg",
+  },  
+  {
+    company: "Astral Internet",
+    location: "Worldwide",
+    services: "VPS",
+    managedSupport: "No",
+    freeEnterprise: "No",
+    link: "https://cloudzy.com/marketplace/openpanel/",
+    logo: "https://cloudzy.com/wp-content/uploads/2025/12/Logo.svg",
+  },  
 ];
 
 const HostingProvidersPage: React.FC = () => {

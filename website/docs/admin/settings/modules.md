@@ -138,12 +138,24 @@ When disabled:
 Customize options:
 * None
 
+
+## Fix Permissions
+
+The **`fix_permissions`** module allows users to reset file/folder permissions.
+
+When enabled:
+* Users can access the [**Files > Fix Permissions** page](/docs/panel/files/fix_permissions/).
+
+When disabled:
+* Users can not access the *Files > Fix Permissions* page.
+
+
 ## FTP
 
 The **`ftp`** module allows users to create and manage FTP sub-accounts.
 
 When enabled:
-* Users can access the [**Files > FTP** page](/docs/panel/caching/varnish/) to manage FTP accounts.
+* Users can access the [**Files > FTP** page](/docs/panel/files/FTP/) to manage FTP accounts.
 
 When disabled:
 * Users can not create and manage FTP accounts.
@@ -200,6 +212,10 @@ Customize options:
 * To **set mysql or mariadb for all new users** use [*OpenAdmin > Settings > User Defaults* page and *MySQL type* option](/docs/admin/settings/defaults/).
 * To **set mysql, percona or mariadb for a single user** when creating their account use the [**MySQL Type** option](/docs/articles/docker/how-to-set-mysql-mariadb-per-user-in-openpanel/).
 * To **change default CPU/RAM for service** use the [*OpenAdmin > Settings > User Defaults* page](/docs/admin/settings/defaults/).
+* To **restrict access to system users** edit the [`mysql_restricted_usernames`](https://dev.openpanel.com/cli/config.html#mysql-restricted-usernames) setting.
+* To **restrict access to system databases** edit the [`mysql_restricted_databases`](https://dev.openpanel.com/cli/config.html#mysql-restricted-databases) setting.
+* To **increase the startup time allowed for waiting MySQL to initalize** increase [`mysql_startup_time`](https://dev.openpanel.com/cli/config.html#mysql-startup-time).
+
 
 How-to guides:
 * To **connect to a database** refer to [*How-to Guides > Connecting to MySQL Server from Applications in OpenPanel](/docs/articles/databases/how-to-connect-to-mysql-from-php-applications-in-openpanel/).
@@ -222,6 +238,25 @@ Customize options:
 * None
 
 
+## phpMyAdmin
+
+The **`phpmyadmin`** module allows users to manage phpMyAdmin service.
+
+When enabled:
+* phpMyAdmin can be managed by the user.
+* phpMyAdmin is available on a custom per-user port.
+
+When disabled:
+* Users do not have access to the *phpMyAdmin* section.
+
+Customize options:
+* To **change php_max_execution_time, php_memory_limit, php_upload_limit** use [*OpenAdmin > MySQL > phpMyAdmin](/docs/panel/mysql/phpmyadmin).
+* To **change default CPU/RAM for phpMyAdmin** use the 'manage' button in top-rgiht corner.
+
+How-to guides:
+* To **import tables into a database** refer to [**the Documentation**](/docs/panel/mysql/phpmyadmin/#import-sql-files).
+* To **set a custom domain for phpMyAdmin** refer to:  [**HOw-to GUides > Custom Domain for phpMyAdmin**](/docs/articles/databases/phpmyadmin-domain/).
+
 ## MySQL Import
 
 The **`mysql_import`** module allows users to import files into their databases.
@@ -233,7 +268,7 @@ When disabled:
 * Users can not access the *MySQL > Import Database* page.
 
 Customize options:
-* None
+* To **set the max file size allowed for import** increase [`mysql_import_max_size_gb`](https://dev.openpanel.com/cli/config.html#mysql-import-max-size-gb) value.
 
 How-to guides:
 * To **import into a database** refer to [*How-to Guides > Importing a Database](/docs/articles/docker/import-database/).
@@ -257,7 +292,82 @@ Customize options:
 
 
 
+## Remote PostgreSQL
 
+The **`remote_postgresql`** module allows users to enable/disable remote access to PostgreSQL.
+
+When enabled:
+* Remote access is disabled by default.
+* Random port is allocated per user for their PostgreSQL instances.
+* Users can access the [**PostgreSQL > Remote Access** page](#) to enable/disable remote access.
+* Users can connect to any database from remote location once the option is enabled.
+
+When disabled:
+* Remote access is disabled.
+
+Customize options:
+* None
+
+
+## pgAdmin
+
+The **`pgadmin`** module allows users to manage pgAdmin service.
+
+When enabled:
+* pgAdmin can be managed by the user.
+* Users have access to the *pgAdmin* section.
+* pgAdmin is available on a custom per-user port.
+
+When disabled:
+* Users do not have access to the *pgAdmin* section.
+
+Customize options:
+* To **change default CPU/RAM for pgAdmin** use the 'manage' button in top-rgiht corner.
+
+
+## PostgreSQL Import
+
+The **`postgresql_import`** module allows users to import files into their databases.
+
+When enabled:
+* Users can access the [**PostgreSQL > Import Database** page](#) to import files into a database.
+
+When disabled:
+* Users can not access the *PostgreSQL > Import Database* page.
+
+Customize options:
+* None
+
+
+## PostgreSQL Conf
+
+The **`postgresql_conf`** module allows users to edit PostgreSQL server configuration.
+
+When enabled:
+* Users can access the [**PostgreSQL > Edit Configuration** page](#) to edit service .cnf file.
+
+When disabled:
+* Users can not access the *PostgreSQL > Edit Configuration* page.
+
+
+## Crons
+
+The **`crons`** module allows users to schedule [Ofelia](https://hub.docker.com/r/mcuadros/ofelia) cron jobs.
+
+When enabled:
+* Users can access the [**Advanced > Cron Jobs** page](/docs/panel/advanced/cronjobs/).
+* Users can [add cronjobs](/docs/panel/advanced/cronjobs/#add)
+* Users can [edit cronjobs](/docs/panel/advanced/cronjobs/#edit)
+* Users can [view logs for cronjobs](/docs/panel/advanced/cronjobs/#logs)
+* Users can [edit crons file](/docs/panel/advanced/cronjobs/#file-editor)
+* Users can [import and export cronjobs](/docs/panel/advanced/cronjobs/#import--export)
+
+When disabled:
+* Users can not access the *Advanced > Cron Jobs* page nor modify crons.
+
+Customize options:
+* To **pre-set cronjobs for new users** edit the `/etc/openpanel/ofelia/users.ini` file.
+* To **set max file size for the cron file to be editable via OpenPanel UI** set the [`cron_max_file_size_kb`](https://dev.openpanel.com/cli/config.html#cron-max-file-size-kb) value.
 
 
 
@@ -274,6 +384,48 @@ When disabled:
 Customize options:
 * None
 
+
+## Server Info
+
+The **`info`** module allows users to view server information, hosting plan information and OpenPanel information.
+
+When enabled:
+* Users can access the [**Advanced > Server Information** page](/docs/panel/advanced/server_info/).
+
+When disabled:
+* Users can not access the *Advanced > Server Information* page.
+
+Customize options:
+* None
+
+
+
+## Temporary Links
+
+The **`temporary_links`** module allows users to test their websites using temporary subdomains (links are valid for 15 minutes).
+
+When enabled:
+* Users can access the [**Live Preview** button on the Site Manager](/docs/panel/applications/wordpress/#temporary-link).
+
+When disabled:
+* Users can not access the *Live Preview* button on the Site Manager page.
+
+Customize options:
+* To **self-host a proxy service** - refer to [How-to Guides > Temporary Links API](/docs/articles/dev-experience/selfhosted-temporary-links-api/).
+* To **configure a custom domain** - update the [`temporary_links` option](https://dev.openpanel.com/cli/config.html#temporary-links).
+
+## Login History
+
+The **`login_history`** module allows users to view login history for their account.
+
+When enabled:
+* Users can access the [**Account > Login History** page](/docs/panel/account/login_history/).
+
+When disabled:
+* Users can not access the *Account > Login History* page.
+
+Customize options:
+* To **control number of logins stored per user** edit 'Login records to keep per user' setting from [OpenAdmin > Settings > OpenPanel](/docs/admin/settings/openpanel/#Statistics).
 
 
 ## 2FA
@@ -305,4 +457,463 @@ Customize options:
 * To **set total number of lines per user** edit `activity_lines_retention` setting.
 * To **set total size of log per user** edit `activity_max_size_bytes` setting.
 * To **log actions from 3rd-party plugin** refer to: [*How to log actions from Custom Plugins in user Activity Log*](https://community.openpanel.org/d/218-how-to-log-actions-from-custom-plugins-in-user-activity-log)
+
+
+## Backups
+
+The **`backups`** module allows users to m=configure their own backups: what to backup, destination, retention, schedule, etc.
+
+When enabled:
+* Users can access the [**Files > Backups** page](/docs/panel/files/backups/).
+* Users can configure backup schedule, encryption, retention and destination.
+
+When disabled:
+* Users do not have access to the *Files > Backups* page.
+* [Administrators need to configure backups for the user](/docs/articles/backups/configuring-backups/#1-admin-configured).
+
+
+
+## Services
+
+The **`services`** module allows users to enable/disable services without the Docker module.
+
+When enabled:
+* Users can access the [**Advanced > Services** page](/docs/panel/advanced/services/).
+* Users can enable/disable services.
+* User view current service status, resource usage (CPU%, Memory%, Disk I/O, PIDs..), container name (to be used to connect to service from other containers).
+* Users can view logs for services.
+
+When disabled:
+* Users do not have access to the *Advanced > Services* page.
+
+
+## Memcached
+
+The **`memcached`** module allows users to enable/disable Memcached service.
+
+When enabled:
+* Users can access the [**Caching > Memcached** page](/docs/panel/caching/memcached/).
+* Users can enable/disable Memcached service.
+* User can connect to the instance from other containers using: `elasticsearch:11211`
+* Users can view logs for the Memcached service.
+
+When disabled:
+* Users do not have access to the *Caching > Memcached* page.
+
+## Redis
+
+The **`redis`** module allows users to enable/disable Redis service.
+
+When enabled:
+* Users can access the [**Caching > Redis** page](/docs/panel/caching/redis/).
+* Users can enable/disable Memcached service.
+* User can connect to the instance from other containers using: `redis:6379`
+* Users can view logs for the Redis service.
+
+When disabled:
+* Users do not have access to the *Caching > Redis* page.
+
+
+## ElasticSearch
+
+The **`elasticsearch`** module allows users to enable/disable ElasticSearch service.
+
+When enabled:
+* Users can access the [**Caching > ElasticSearch** page](/docs/panel/caching/elasticsearch/).
+* Users can enable/disable ElasticSearch service.
+* User can connect to the instance from other containers using: `elasticsearch:9200`
+* Users can view logs for the ElasticSearch service.
+
+When disabled:
+* Users do not have access to the *Caching > ElasticSearch* page.
+
+
+
+## OpenSearch
+
+The **`opensearch`** module allows users to enable/disable OpenSearch service.
+
+When enabled:
+* Users can access the [**Caching > OpenSearch** page](/docs/panel/caching/opensearch/).
+* Users can enable/disable OpenSearch service.
+* User can connect to the instance from other containers using: `opensearch:9200`
+* Users can view logs for the OpenSearch service.
+
+When disabled:
+* Users do not have access to the *Caching > OpenSearch* page.
+
+
+## Disk Usage Explorer
+
+The **`disk_usage`** module allows users to view disk usage per-directory.
+
+When enabled:
+* Users can access the [**Files > Disk Usage** page](/docs/panel/files/disk_usage/).
+
+When disabled:
+* Users do not have access to the *Files > Disk Usage* page.
+
+
+## Inodes Explorer
+
+The **`disk_usage`** module allows users to view disk usage per-directory.
+
+When enabled:
+* Users can access the [**Files > Inodes Explorer** page](/docs/panel/files/inodes/).
+
+When disabled:
+* Users do not have access to the *Files > Inodes Explorer* page.
+
+
+
+
+
+## AutoInstaller
+The **`autoinstaller`** module allows users to autoinstall WordPress, website Builder, Mautic, Python/NodeJS applications, etc.
+
+When enabled:
+* Users can access the [**Websites > Auto Installer** page](/docs/panel/applications/autoinstaller/).
+
+When disabled:
+* Users do not have access to the *Websites > Auto Installer* page.
+
+
+## PHP.INI Editor
+The **`php_ini`** module allows users to edit the PNP.INI files using a text editor.
+
+When enabled:
+* Users can access the [**PHP > PHP.INI Editor** page](/docs/panel/php/php_ini_editor/).
+
+When disabled:
+* Users do not have access to the *PHP > PHP.INI Editor* page.
+
+
+## WordPress
+
+The **`wordpress`** module allows users to install and manage WordPress websites.
+
+When enabled:
+* Users can access the [**Websites > WP Manager** page](/docs/panel/applications/wordpress/).
+* Users can [manage WordPress websites using WP Manager](/docs/panel/applications/wordpress/#site-manager).
+* WordPress is available on the Autoinstaller page.
+* Users can [install WordPress using Auto Installer](/docs/panel/applications/wordpress/#install-wordpress).
+* Users can [scan and import existing installations](/docs/panel/applications/wordpress/#scanning-importing-installations).
+* Users can [set themes and plugins to auto-install](/docs/panel/applications/wordpress/#themes-and-plugins-sets).
+
+When disabled:
+* Users can not access the *Websites > WP Manager* page.
+* WordPress is not available in Autoinstaller.
+* WordPress websites can not be managed via Openpanel.
+
+Customize options:
+* To **auto install themes or plugins on new installations** refer to: [*WordPress Themes and Plugins Sets*](/docs/articles/websites/wordpress-plugins-themes-sets-in-openpanel/)
+* To **add a custom Google PageSpeed Insights API Key** refer to: [*How-to Guides > Google PageSpeed Insights API Key*](/docs/articles/websites/google-pagespeed-insights-api-key/)
+* To **setup a mu-plugin on all new websites** edit `/etc/openpanel/wordpress/mu-plugin.php` file.
+* To **set a custom WP-CLI for all websites** replace the `/etc/openpanel/wordpress/wp-cli.phar` file.
+* To **customize .htaccess files used for new websites** edit files in `/etc/openpanel/wordpress/htaccess/` folder.
+
+## Website Builder
+
+The **`website_builder`** module allows users to create simple websites using the HTML Drag & Drop Website Builder.
+
+When enabled:
+* Users can access the [**Websites > Website Builder** page](/docs/panel/applications/builder/).
+* Users can [manage static websites using Site Manager](/docs/panel/applications/builder/#edit-website).
+* Website Builder is available on the Autoinstaller page.
+* Users can [create static websites using Auto Installer](/docs/panel/applications/builder/#create-a-website).
+
+When disabled:
+* Users can not access the *Websites > Website Builder* page.
+* Website Builder is not available in Autoinstaller.
+* Static websites can not be managed via Openpanel.
+
+## Mautic
+
+The **`mautic`** module allows users to install and manage Mautic from OpenPanel. 
+
+> **NOTE:** This module is no longer actively maintained and should not be used in production (*BETA* tag).
+
+When enabled:
+* Users can [manage Mautic websites using Site Manager](/docs/panel/applications/).
+* Mautic is available on the AutoInstaller page.
+* Users can [install Mautic using the AutoInstaller](/docs/articles/websites/how-to-install-mautic-with-openpanel/).
+
+When disabled:
+* Mautic is not available in Autoinstaller.
+
+## ClamAV
+
+The **`malware_scanner`** module starts a ClamAV service and allows users to scan files. 
+
+> **NOTE:** This module is no longer actively maintained and should not be used in production (*DEPRECATED* tag).
+
+When enabled:
+* Users can access the [**Files > Malware Scanner** page](/docs/panel/files/malware-scanner/).
+* ClamAV service is started on the server.
+
+When disabled:
+* Users can not access the *Files > Malware Scanner* page.
+* ClamAV service is not started on the server.
+
+Customize options:
+* To **customize the cpu/memory limits for the ClamAV service** refer to: [*OpenAdmin > Services > Service Limits*](/docs/admin/services/limits/).
+
+
+
+## Files
+
+The **`files`** module allows users to manage files and folders using the File Manager.
+
+When enabled:
+* Users can access the [**Files > File Manager** page](/docs/panel/files/).
+* File Manager links are available on other pages: Domains, WP Manager, etc.
+
+When disabled:
+* Users can not access the *Files > File Manager* page.
+* No links to manage files are shown on other pages.
+
+
+
+
+## Domains
+
+The **`domains`** module allows users to add and manage domains.
+
+When enabled:
+* Users can access the [**Domains** page](/docs/panel/domains/).
+* Users can manage domains.
+* Users can access the 'Domains' sub-pages in the menu.
+
+When disabled:
+* Users can not access the *Domains* page.
+* Users can not manage domains.
+
+Customize options:
+* To **enable HSTS for a domain** refer to:  [*How-to Guides > How to Enable HSTS on a Domain in OpenPanel*](/docs/articles/domains/how-to-enable-hsts-on-a-domain-in-openpanel/)
+* To **customize default pages** refer to: [*OpenAdmin > Domains > Edit Domain Templates*](/docs/admin/domains/file_templates/)
+
+
+## Raw Access Logs
+
+The **`domain_logs`** module allows users to view the raw access log for their domains.
+
+When enabled:
+* Users can access the [**Domains > Raw Access Logs** page](/docs/panel/domains/docroot/).
+
+When disabled:
+* Users can not access the *Domains > Raw Access Logs* page.
+
+
+
+## GoAccess
+
+The **`goaccess`** module runs the GoAccess service on a scheduled basis to process raw domain logs and produce HTML reports accessible through the OpenPanel UI.
+
+When enabled:
+* GoAccess service is run on the server.
+* Users can access the [**Domains > GoAccess** page](/docs/panel/domains/goaccess/).
+
+When disabled:
+* Users can not access the *Domains > GoAccess* page.
+
+Customize options:
+* To **disable GoACcess report generation** update the: [*`goaccess_enable` value*](https://dev.openpanel.com/cli/config.html#goaccess-enable)
+* To **change how often the reports are generated (default = @daily)** edit the schedule for [`domains-stats` cron](https://dev.openpanel.com/crons.html#domains-stats) and the [`goaccess_schedule` value](https://dev.openpanel.com/cli/config.html#goaccess-schedule).
+* To **generate the data manually** execute [`domains-stats` cron](https://dev.openpanel.com/crons.html#domains-stats).
+* To **force regeneration of the reports* refer to: [*OpenCLI Documentation > Parse domain access logs*](https://dev.openpanel.com/cli/domains.html#Parse-domain-access-logs).
+
+
+## Docroot
+
+The **`docroot`** module allows users to set a custom docroot (folder) when adding domains, and later change the path.
+
+When enabled:
+* Users can access the [**Domains > Change Docroot** page](/docs/panel/domains/docroot/).
+* Users can set a custom docroot when adding a domain.
+
+When disabled:
+* Users can not set a custom docroot when adding a domaina, and can not later change the docroot.
+
+## Redirects
+
+The **`redirects`** module allows users to create redirects for domains.
+
+When enabled:
+* Users can access the [**Domains > Redirects** page](/docs/panel/domains/redirects/).
+
+When disabled:
+* Users can not access the *Domains > Redirects* page.
+
+
+
+## Capitalize Domains
+
+The **`capitalize_domains`** module allows users to set a capitalized version fo the domain for dispaly in the OpenPanel.
+
+When enabled:
+* Users can access the [**Domains > Capitalize Domains** page](/docs/panel/domains/capitalize/).
+
+When disabled:
+* Users can not access the *Domains > Capitalize Domains* page.
+
+
+## Edit VirtualHosts
+
+The **`edit_vhost`** module allows users to edit the VirtualHosts files for their domains.
+
+When enabled:
+* Users can access the [**Domains > Edit VHosts File** page](/docs/panel/domains/vhosts/).
+
+When disabled:
+* Users can not access the *Domains > Edit VHosts File* page.
+
+Customize options:
+* To **customize the vhost files for Apache/Nginx/OpenLiteSpeed** refer to: [*OpenAdmin > Domains > Edit Domain Templates*](/docs/admin/domains/file_templates/#apache-virtualhost)
+
+
+## Webserver
+
+The **`webserver_conf`** module allows users to edit the main configuration files for their webservers.
+
+When enabled:
+* Users can access the [**Advanced > WebServer Settings** page](/docs/panel/advanced/webserver_settings/).
+* Users can edit the `httpd.conf` file for Apache.
+* Users can edit the `nginx.conf` file for Nginx/OpenResty.
+* Users can edit the `openlitespeed.conf` file for OpenLiteSpeed.
+
+When disabled:
+* Users can not access the *Advanced > WebServer Settings* page.
+
+Customize options:
+* To **customize the default `httpd.conf` file for Apache** edit `/etc/openpanel/apache/httpd.conf` file.
+* To **customize the default `nginx.conf` file for Nginx** edit `/etc/openpanel/nginx/nginx.conf` file.
+* To **customize the default `openlitespeed.conf` file for OpenLiteSpeed** edit `/etc/openpanel/openlitespeed/httpd_config.conf` file.
+* To **customize the default `nginx.conf` file for OpenResty** edit `/etc/openpanel/openresty/nginx.conf` file.
+
+## DNS
+
+The **`dns`** module runs a local BIND9 service, creates zone files for domains and allows users to manage DNS records.
+
+When enabled:
+* BIND9 service is run on the server.
+* Users can access the [**Domains > DNS Zone Editor** page](/docs/panel/domains/dns/).
+* DNS zone files are created for new domains.
+* Users can manage DNS records.
+* 'Edit Zone' links are available for domains under the *OpenPanel > Domains* page.
+* Administrators can access the [**OpenAdmin > Domains > DNS Cluster** page](/docs/admin/domains/dns-cluster/).
+* Administrators can access the [**OpenAdmin > Domains > Edit Zone Templates** page](/docs/admin/domains/dns_templates/).
+* Administrators can access the [**OpenAdmin > Domains > DNS Zone Editor** page](/docs/admin/domains/dns/).
+
+When disabled:
+* Users can not access the *Domains > DNS Zone Editor* page.
+* Administrators can not access the *DNS Zone Editor*, *Edit Zone Templates*, and *DNS Cluster* pages in OpenAdmin.
+
+Customize options:
+* To **configure nameservers** refer to: [*How-to Guides > Configure Nameservers*](/docs/articles/domains/how-to-configure-nameservers-in-openpanel/)
+* To **customize DNS zone templates** refer to: [OpenAdmin > Domains > Edit Zone Templates](/docs/admin/domains/dns_templates/)
+* To **configure a DNS cluster** refer to:  [*How-to Guides > DNS Clustering*](/docs/articles/domains/how-to-setup-dns-cluster-in-openpanel/)
+
+
+
+
+## WAF
+
+The **`waf`** module runs a custom Caddy image with CorazaWAF and allows users to manage WAF rules and on/off protection per domain.
+
+When enabled:
+* `SecRuleEngine On` is set for new domains.
+* Users can access the [**Advanced > WAF** page](/docs/panel/advanced/waf/).
+* [OWASP CRS](https://github.com/coreruleset/coreruleset) is setup on installation.
+* Users can edit WAF rules and enable/disable protection per domain.
+* ['Firewall' widget is displayed in Site Manager](/docs/panel/applications/wordpress/#firewall).
+
+When disabled:
+* `SecRuleEngine Off` is set for new domains.
+* `SecRuleEngine On` is replaced with `SecRuleEngine Off` for all existing domains.
+* Users can not access the *Advanced > WAF* page.
+* 'Firewall' widget is not displayed in Site Manager.
+
+Customize options:
+* [**WAF commmands**](https://dev.openpanel.com/cli/waf.html#CorazaWAF)
+
+## PHP
+
+The **`php`** module allows users to manage PHP versions and settings.
+
+When enabled:
+* Users can access the [**PHP > Select PHP Version** page](/docs/panel/php/domains/).
+* Users can access the [**PHP > Default Version** page](/docs/panel/php/default/).
+* Users can access the [**PHP > Extensions** page](/docs/panel/php/extensions/).
+* Users can set PHP version per domain, set default version for new domains, edit options and view installed extensions.
+
+When disabled:
+* Users can not access the *Select PHP Version*, *Default Version*, *Options*, *Extensions* pages.
+* Users can not set PHP version per domain, set default version for new domains, edit options and view installed extensions.
+
+Customize options:
+* To **set the default PHP version to be used for new users** refer to: [*OpenAdmin > Settings > Edit User Defaults > Default PHP version*](/docs/panel/php/options/#available-options)
+* To **set default cpu/memory limits for PHP versions and additional PHP options** refer to: [*OpenAdmin > Settings > Edit User Defaults > Services*](/docs/panel/php/options/#available-options)
+* To **install a PHP extension** refer to: [*How-to Guides > How to install a PHP extension in OpenPanel*](/docs/articles/websites/how-to-install-php-extensions-in-openpanel/).
+* To **increase PHP INI memory_limit** refer to: [*How-to Guides > How to set or increase PHP INI memory_limit or other values?*](/docs/articles/websites/how-to-set-or-increase-PHP-INI-memory-limit-or-other-values/).
+* To **set PHP settings per website** refer to: [*How-to Guides > PHP settings per website (folder)*](/docs/articles/websites/php-user-ini-files/).
+* To **edit default .INI files** refer to: **OpenAdmin > Settings > PHP Settings > Default PHP.INI Files** or edit files in `/etc/openpanel/php/ini` folder.
+
+## PHP Options
+
+The **`php_options`** module allows users to manage options (limits) for their PHP versions.
+
+When enabled:
+* Users can access the [**PHP > Options** page](/docs/panel/php/options/).
+
+When disabled:
+* Users can not access the *PHP Options* page.
+
+Customize options:
+* To **customize PHP options available to users** refer to: **OpenAdmin > Settings > PHP Settings > Available Options** or edit */etc/openpanel/php/options.txt* file.
+
+
+
+## Applications
+
+The **`pm2`** module allows users to setup and manage containerized Python and NodeJS applications.
+
+When enabled:
+* Users can access the [**Websites > WP Manager** page](/docs/panel/applications/wordpress/).
+* Users can [manage Python and NodeJS applications using Site Manager](/docs/panel/applications/pm2/#manage-applications).
+* NodeJS and Python are available on the Autoinstaller page.
+* Users can [setup NodeJS and Python applications using Auto Installer](/docs/panel/applications/pm2/#create-an-application).
+
+When disabled:
+* NodeJS and Python are not available on the Autoinstaller page.
+* NodeJS and Python applications can not be managed via Openpanel.
+
+Customize options:
+* To **customize docker service template for new Python applications** edit `/etc/openpanel/docker/compose/python.yml` file.
+* To **customize docker service template for new Node.JS applications** edit `/etc/openpanel/docker/compose/nodejs.yml` file.
+* To **customize headers for Nginx proxy of new python/node application** edit `/etc/openpanel/nginx/vhosts/1.1/nginx_proxy_headers.txt` file.
+* To **add a custom Google PageSpeed Insights API Key** refer to: [*How-to Guides > Google PageSpeed Insights API Key*](/docs/articles/websites/google-pagespeed-insights-api-key/)
+
+
+
+
+## Resources Usage
+
+The **`usage`** module allows users to view resource usage for their services.
+
+When enabled:
+* Users can access the [**Advanced > Resource Usage** page](/docs/panel/advanced/resource_usage/).
+* Users can [manage Python and NodeJS applications using Site Manager](/docs/panel/applications/pm2/#manage-applications).
+* NodeJS and Python are available on the Autoinstaller page.
+* Users can [setup NodeJS and Python applications using Auto Installer](/docs/panel/applications/pm2/#create-an-application).
+
+When disabled:
+* Users can not access the *Advanced > Resource Usage* page.
+
+Customize options:
+* To **edit page settings** refer to: [**OpenAdmin > Settings > OpenPanel > Statistics** page](/docs/admin/settings/openpanel/#statistics).
+* To **change how often the stats are collected (default = @hourly)** edit the schedule for [`docker-collect_stats --all` cron](https://dev.openpanel.com/crons.html#docker-collect-stats-all).
+* To **display one combined or separate charts for cpu/ram** edit [`resource_usage_charts_mode` value](https://dev.openpanel.com/cli/config.html#resource-usage-charts-mode).
+* To **change the number of items per page** edit [`resource_usage_items_per_page` value](https://dev.openpanel.com/cli/config.html#resource-usage-items-per-page).
+* To **rotate the** edit [`resource_usage_retention` value](https://dev.openpanel.com/cli/config.html#resource-usage-retention).
+
 

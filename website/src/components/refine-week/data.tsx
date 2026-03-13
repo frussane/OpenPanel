@@ -15,22 +15,126 @@ import { FooterTwitterIcon as TwitterIcon } from "../../refine-theme/icons/foote
 
 const hashtags = "opensource";
 const supabaseShareTweetURL = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-    "https://refine.dev/week-of-refine-supabase/",
+    "https://openpanel.com/whmcs-module/",
 )}&text=${encodeURIComponent(
-    `📚 RefineWeek ft Supabase: A week-long journey of building a complete CRUD app with @refine_dev and @supabase!\n\n`,
+    `📚 Setup WHMCS & OpenPanel account provisioning in just 5 minutes.\n\n`,
 )}&hashtags=${hashtags}`;
 
 const strapiShareTweetURL = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-    "https://refine.dev/week-of-refine-strapi/",
+    "https://openpanel.com/fossbilling-module/",
 )}&text=${encodeURIComponent(
-    `📚 RefineWeek ft Strapi: A week-long journey of building a complete CRUD app with @refine_dev and @strapijs!\n\n`,
+    `📚 Setup FOSSBilling & OpenPanel account provisioning in just 5 minutes.\n\n`,
 )}&hashtags=${hashtags}`;
 
+const blestaShareTweetURL = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+    "https://openpanel.com/blesta-module/",
+)}&text=${encodeURIComponent(
+    `📚 Setup Blesta & OpenPanel account provisioning in just 5 minutes.\n\n`,
+)}&hashtags=${hashtags}`;
+
+
 export const data = {
+    blesta: {
+        logo: SupabaseWithText,
+        cover: "/img/tutorial-cards/blesta.jpeg",
+        cover2x: "/img/tutorial-cards/blesta.jpeg",
+        coverAlt: "refine week",
+        title: "blesta",
+        description:
+            "Setup <strong>Blesta & OpenPanel</strong> account provisioning in just 5 minutes.",
+        date: "February 14 - February 20, 2023",
+        timeline: [
+            {
+                date: "February 14, Monday",
+                title: "Upload OpenPanel Module",
+                description: `
+                Upload the <strong className="font-bold">openpanel</strong> directory to your Blesta installation at 
+                <strong className="font-bold">components/modules/openpanel/</strong>.`,
+                link: "https://github.com/Equitia/blesta-module-openpanel?tab=readme-ov-file#installation",
+                image: "/week-of-refine/supabase-timeline-1.jpg",
+                image2x: "/week-of-refine/supabase-timeline-1-2x.jpg",
+            },
+            {
+                date: "February 15, Tuesday",
+                title: "Install Module in Blesta",
+                description: `
+                Log in to your <strong className="font-bold">Blesta Admin area</strong>, navigate to 
+                <strong className="font-bold">Settings > Modules > Available</strong>, find 
+                <strong className="font-bold">OpenPanel</strong> and click 
+                <strong className="font-bold">Install</strong>.`,
+                link: "https://github.com/Equitia/blesta-module-openpanel?tab=readme-ov-file#installation",
+                image: "/week-of-refine/supabase-timeline-2.jpg",
+                image2x: "/week-of-refine/supabase-timeline-2-2x.jpg",
+            },
+            {
+                date: "February 16, Wednesday",
+                title: "Enable API Access on OpenPanel",
+                description: `
+                Log in to your <strong className="font-bold">OpenAdmin panel</strong>, go to 
+                <strong className="font-bold">Settings > OpenPanel API</strong>, and enable 
+                <strong className="font-bold">API Access</strong>. 
+                (Optional but recommended) Whitelist your Blesta server IP address in Firewall settings.`,
+                link: "https://github.com/Equitia/blesta-module-openpanel?tab=readme-ov-file#1-enable-api-access-on-openpanel",
+                image: "/week-of-refine/supabase-timeline-3.jpg",
+                image2x: "/week-of-refine/supabase-timeline-3-2x.jpg",
+            },
+            {
+                date: "February 17, Thursday",
+                title: "Add Server in Blesta",
+                description: `
+                Navigate to <strong className="font-bold">Settings > Modules > Installed > OpenPanel > Add Server</strong> 
+                and enter your server details: Hostname, API Port (default 2087), HTTPS enabled, Admin Username and Password. 
+                Then click <strong className="font-bold">Add Server</strong>.`,
+                link: "https://github.com/Equitia/blesta-module-openpanel?tab=readme-ov-file#2-add-server-in-blesta",
+                image: "/week-of-refine/supabase-timeline-4.jpg",
+                image2x: "/week-of-refine/supabase-timeline-4-2x.jpg",
+            },
+            {
+                date: "February 18, Friday",
+                title: "Create a Package",
+                description: `
+                Navigate to <strong className="font-bold">Packages > Browse Packages > Create Package</strong>. 
+                Under <strong className="font-bold">Module Options</strong>, select 
+                <strong className="font-bold">OpenPanel</strong>, choose your Server Group and 
+                select the desired <strong className="font-bold">OpenPanel Plan</strong>. 
+                If no plans appear, verify API credentials and API status.`,
+                link: "https://github.com/Equitia/blesta-module-openpanel?tab=readme-ov-file#installation",
+                image: "/week-of-refine/supabase-timeline-5.jpg",
+                image2x: "/week-of-refine/supabase-timeline-5-2x.jpg",
+            },
+            {
+                date: "Februrary 19, Saturday",
+                title: "Test Provisioning",
+                description: `
+                Create a test order in Blesta to verify that automatic 
+                <strong className="font-bold">Account Provisioning</strong> works correctly. 
+                You can also test upgrades, suspensions, terminations, and Single Sign-On (SSO).`,
+                link: "",
+                image: "/week-of-refine/supabase-timeline-6.jpg",
+                image2x: "/week-of-refine/supabase-timeline-6-2x.jpg",
+            },
+        ],
+
+        shareTweetUrl: blestaShareTweetURL,
+        tweetIDList: [
+            "1645507785621209097",
+            "1635625661778763776",
+            "1640741763408076803",
+            "1625488050863353856",
+            "1615260152822628352",
+            "1621513516036526080",
+            "1621932348009861132",
+            "1597878371760979970",
+            "1616390215068688384",
+            "1617841995233529861",
+            "1620724625536880641",
+            "1618180208414322689",
+        ],
+    },    
     supabase: {
         logo: SupabaseWithText,
-        cover: "/week-of-refine/supabase-cover.jpg",
-        cover2x: "/week-of-refine/supabase-cover-2x.jpg",
+        cover: "/img/tutorial-cards/whmcs.jpeg",
+        cover2x: "/img/tutorial-cards/whmcs.jpeg",
         coverAlt: "refine week",
         title: "supabase",
         description:
@@ -106,8 +210,8 @@ export const data = {
     },
     strapi: {
         logo: StrapiWithText,
-        cover: "/week-of-refine/strapi-cover.png",
-        cover2x: "/week-of-refine/strapi-cover-2x.png",
+        cover: "/img/tutorial-cards/FOSSBilling.png",
+        cover2x: "/img/tutorial-cards/FOSSBilling.png",
         coverAlt: "Refine week",
         title: "strapi",
         description:

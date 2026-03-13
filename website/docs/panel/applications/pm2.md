@@ -32,6 +32,76 @@ On the next page, you can configure the following settings:
 After completing the form, click **Start Installation**.
 The installation process will be displayed below the form. Once complete, you’ll be redirected to the management page where you can view all your applications.
 
+### NodeJS Example App
+
+An example NodeJS (express) application that is running on http://nodejs.openpanel.org/
+
+Example settings:
+![example](https://i.postimg.cc/cdC3Jxdp/example-nodejs-settings.png)
+
+Example `app.js` file:
+
+```js
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World from Node.js on port 3000!');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
+```
+
+Example `package.json` file:
+
+```json
+{
+  "name": "helloworld-node",
+  "version": "1.0.0",
+  "description": "Simple Node.js Hello World app using Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Stefan Pejcic",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+```
+
+### Python Example App
+
+An example Python (Flask) application that is running on http://python.openpanel.org/
+
+Example settings:
+![example](https://i.postimg.cc/D2Z3DNdW/example-python-settings.png)
+
+Example `app.py` file:
+
+```py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return "Hello World from Flask on port 5000!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+Example `requirements.txt` file:
+
+```json
+Flask==2.3.3
+```
+
 ---
 
 ## Manage Applications

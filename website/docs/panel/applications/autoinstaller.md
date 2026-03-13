@@ -10,9 +10,12 @@ Auto Installer allows you to one-click install applications.
 
 ## Available Applications
 
+For an application to appear on the Autoinstaller page, the corresponding module must be enabled.
+
 - WordPress
 - NodeJS Applications*
 - Python Applications*
+- Mautic (BETA)
 - Website Builder
 
 `*` Indicates that the feature is available only in Enterprise editon.

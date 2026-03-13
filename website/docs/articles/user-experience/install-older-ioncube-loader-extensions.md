@@ -1,20 +1,34 @@
-# How to Install Older Versions of Ioncube Loader Extensions for PHP
+# How to Install Custom or Older IonCube Loader Versions in OpenPanel
 
-Administrators can configure a custom link to a `.tar.gz` archive containing older Ioncube Loader versions. By default, the file does not exist, and the `opencli php-ioncube` script will download the latest versions from the Ioncube Loader website.
+Starting with **OpenPanel version 1.7.2**, IonCube Loader is automatically available for all PHP versions that support it on new installations.
 
-Follow these steps to set up an older version of Ioncube Loader:
+## Older Versions
 
-1. **Create a directory named `ioncube`.**
+If you want to downgrade to an older ionCube Loader bundle (or use a custom bundle) you can do so easily.
 
-2. **Place the loader files in the directory.**  
-   Inside the `ioncube` directory, add the loader files for each PHP version in the format: `ioncube_loader_lin_*.so`
+After placing the files on your server:
 
-3. **Compress the directory into a `.tar.gz` archive.**
+* **For a single user:** Edit their `docker-compose.yml` file and update the volume mount points for the **php-fpm-*** services so they reference your custom files.
+* **For all new users:** Edit the template file located at `/etc/openpanel/docker/compose/1.0/docker-compose.yml`.
 
-4. **Upload the archive online.**  
-Upload the `.tar.gz` archive to a web-accessible location and copy the download link.
+## Check if enabled
 
-5. **Set the download link.**  
-Add the link to the `/etc/openpanel/php/ioncube.txt` file.
+To confirm whether IonCube Loader is active for your PHP version, you can use any of the following methods:
 
-Once the link is set, all subsequent Ioncube Loader installations using the [opencli php-ioncube](https://dev.openpanel.com/cli/php.html#Enable-ioncube-loader) command will download the loader from the specified archive.
+From terminal run:
+
+```bash
+php -i | grep ioncube
+```
+
+Or create a file named **info.php** in your domain’s public directory with the following content:
+
+```php
+<?php
+phpinfo();
+```
+
+Then open it in your browser:
+`https://yourdomain.tld/info.php`
+
+Look for **IonCube PHP Loader** in the output to verify that it is enabled.
