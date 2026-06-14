@@ -6,7 +6,7 @@
 # Docs: https://docs.openpanel.com
 # Author: Stefan Pejcic
 # Created: 01.10.2023
-# Last Modified: 12.06.2026
+# Last Modified: 13.06.2026
 # Company: openpanel.com
 # Copyright (c) openpanel.com
 # 
@@ -804,11 +804,11 @@ configure_environment() {
     chown -R "${USERNAME}:${USERNAME}" "${home_dir}/sockets"
     chmod 777 "${home_dir}/sockets/"
 
-    printf '[client]\nuser=root\npassword=%s\n' "$mysql_root_pw" > "${home_dir}/my.cnf"
+    printf '[client]\nuser=root\npassword=%s\n' "$root_password_for_services" > "${home_dir}/my.cnf"
     [[ -f "${home_dir}/my.cnf" ]] || echo "[!] Warning: Failed to create my.cnf."
 
     # shellcheck disable=SC2034
-    MYSQL_ROOT_PASSWORD="$mysql_root_pw"   # exported for pull_images
+    MYSQL_ROOT_PASSWORD="$root_password_for_services"   # exported for pull_images
 }
 
 copy_skeleton_files() {
