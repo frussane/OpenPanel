@@ -5,7 +5,7 @@
 # Usage: opencli domains-delete <DOMAIN_NAME> --debug
 # Author: Stefan Pejcic
 # Created: 07.11.2024
-# Last Modified: 13.08.2026
+# Last Modified: 28.08.2026
 # Company: openpanel.com
 # Copyright (c) openpanel.com
 # 
@@ -470,7 +470,7 @@ delete_domain() {
     local domain_name="$2"
     
     delete_websites $domain_name                     # delete sites associated with domain id
-    # TODO: delete pm2 apps associated with domain
+    # TODO: delete apps associated with domain
     delete_domain_from_mysql $domain_name            # delete
 
 	local verify_query="SELECT COUNT(*) FROM domains WHERE domain_url = '$domain_name';"

@@ -344,6 +344,22 @@
     "help_link": ""
   },
   {
+    "name": "dokuwiki",
+    "title": "DokuWiki",
+    "description": "If enabled, DokuWiki can be installed using the Autoinstaller and users can use the Site Manager to manage websites.",
+    "link": "/dokuwiki/install",
+    "type": "beta",
+    "help_link": ""
+  },
+  {
+    "name": "phpbb",
+    "title": "phpBB",
+    "description": "If enabled, phpBB can be installed using the Autoinstaller and users can use the Site Manager to manage websites.",
+    "link": "/phpbb/install",
+    "type": "beta",
+    "help_link": ""
+  },  
+  {
     "name": "opencart",
     "title": "OpenCart",
     "description": "If enabled, OpenCart can be installed using the Autoinstaller and users can use the Site Manager to manage websites.",
@@ -406,6 +422,22 @@
     "link": "/nodejs",
     "type": "enterprise",
     "help_link": "https://openpanel.com/docs/admin/settings/modules/#nodejs"
+  },
+  {
+    "name": "ruby",
+    "title": "Ruby Applications",
+    "description": "If enabled, containerized Ruby applications can be setup from the Autoinstaller.",
+    "link": "/ruby",
+    "type": "enterprise",
+    "help_link": "https://openpanel.com/docs/admin/settings/modules/#ruby"
+  },
+  {
+    "name": "java",
+    "title": "Java Applications",
+    "description": "If enabled, containerized Java applications can be setup from the Autoinstaller.",
+    "link": "/java",
+    "type": "enterprise",
+    "help_link": "https://openpanel.com/docs/admin/settings/modules/#java"
   },
   {
     "name": "autoinstaller",
@@ -484,7 +516,7 @@
     "title": "ClamAV (Malware Scanner)",
     "description": "If enabled, ClamAV service is started and users can scan run scans.",
     "link": "/malware-scanner",
-    "type": "beta",
+    "type": "enterprise",
     "help_link": ""
   },  
   {
@@ -503,6 +535,15 @@
     "type": "community",
     "help_link": "https://openpanel.com/docs/admin/settings/modules/#dns"
   },
+
+  {
+    "name": "dynamic_dns",
+    "title": "Dynamic DNS",
+    "description": "If enabled, users can create subdomains that will be updated via webhooks.",
+    "link": "/domains/dynamic-dns",
+    "type": "enterprise",
+    "help_link": "https://openpanel.com/docs/admin/settings/modules/#dynamic-dns"
+  },  
   {
     "name": "redirects",
     "title": "Domain Redirects",
@@ -670,14 +711,6 @@
     "link": "/account/activity",
     "type": "community",
     "help_link": "https://openpanel.com/docs/admin/settings/modules/#activity"
-  },
-  {
-    "name": "dynamic_dns",
-    "title": "Dynamic DNS",
-    "description": "If enabled, users can create subdomains that will be updated via webhooks.",
-    "link": "/domains/dynamic-dns",
-    "type": "enterprise",
-    "help_link": "https://openpanel.com/docs/admin/settings/modules/#dynamic-dns"
   },
   {
     "name": "ip_blocker",
