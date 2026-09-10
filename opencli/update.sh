@@ -5,7 +5,7 @@
 # Usage: opencli update [--check | --force | --admin | --panel | --cli]
 # Author: Stefan Pejcic
 # Created: 10.10.2023
-# Last Modified: 04.09.2026
+# Last Modified: 09.09.2026
 # Company: openpanel.com
 # Copyright (c) openpanel.com
 # 
@@ -790,7 +790,12 @@ restart_admin() {
     if systemctl is-active --quiet admin; then
         message="'OpenAdmin' service is running, restarting..."
         [[ "$1" == "--no-log" ]] && echo $message || log $message
-        [[ "$1" == "--no-log" ]] && systemctl restart admin || systemctl restart admin 2>&1 | tee -a "$log_file"
+
+        if [[ "$1" == "--no-log" ]]; then
+            systemd-run --on-active=3s --unit=openadmin-restart --quiet /bin/systemctl restart admin
+        else
+            systemctl restart admin 2>&1 | tee -a "$log_file"
+        fi
     else
         message="[!] Service 'admin' is not running, skipping restart."
         [[ "$1" == "--no-log" ]] && echo $message || echo $message | tee -a "$log_file"
