@@ -40,18 +40,48 @@ except ImportError:
 
 # --- extraction -------------------------------------------------------
 
-TMPL_GET = re.compile(r'\.T\.Get\s+"((?:[^"\\]|\\.)*)"')
+TMPL_GET = re.compile(r'(?:\.T|\$t)\.Get\s+"((?:[^"\\]|\\.)*)"')
+# literals handed to a partial that translates them itself, e.g. (dict "T" .T "Title" "Optimize Database")
+TMPL_DICT_RE = re.compile(r'"(?:Title|Intro|Checking)"\s+"((?:[^"\\]|\\.)*)"')
 TMPL_GETN = re.compile(r'\.T\.GetN\s+"((?:[^"\\]|\\.)*)"\s+"((?:[^"\\]|\\.)*)"')
 GO_GET = re.compile(r'(?:^|[^\w.])(?:t|T|layout\.T|[A-Za-z_][A-Za-z0-9_]*\.T)\.Get\(\s*"((?:[^"\\]|\\.)*)"')
 GO_GETN = re.compile(r'(?:^|[^\w.])(?:t|T|layout\.T|[A-Za-z_][A-Za-z0-9_]*\.T)\.GetN\(\s*"((?:[^"\\]|\\.)*)"\s*,\s*"((?:[^"\\]|\\.)*)"')
-FIELD_RE = re.compile(r'\b(?:Label|Title|PageTitle|TechDetails|RequirementsLabel|RequirementsTooltip):\s*"((?:[^"\\]|\\.)*)"')
+FIELD_RE = re.compile(r'\b(?:Label|Title|PageTitle|TechDetails|Description|RequirementsLabel|RequirementsTooltip|Message):\s*"((?:[^"\\]|\\.)*)"(?=\s*(?:,|\}|$))')
+# form/page errors set before render and translated in the template, e.g. formView.Error = "..."
+ASSIGN_RE = re.compile(r'\.(?:Error|Message)\s*=\s*"((?:[^"\\]|\\.)*)"\s*$')
 
 # Positional-literal struct definitions that indirectly feed .T.Get in a
 # template. These are hand-picked because Go struct literals with
 # unlabeled positional fields can't be found by a generic pattern - update
 # this list if those files' shapes change.
 SECTIONS_GO = "internal/modules/dashboard/sections.go"
-SECTIONS_ITEM_RE = re.compile(r'\{"[^"]*",\s*"[^"]*",\s*"[^"]*",\s*"((?:[^"\\]|\\.)*)",\s*"[^"]*"\}')
+SECTIONS_ITEM_RE = re.compile(r'\{"[^"]*",\s*"[^"]*",\s*"[^"]*",\s*"((?:[^"\\]|\\.)*)",\s*"[^"]*"(?:,\s*\w+)*\}')
+
+# sidebar.go nav labels: g.add(links, "key", "href", "Label", ...) and {label: "..."} menu entries
+SIDEBAR_GO = "internal/web/sidebar.go"
+SIDEBAR_ADD_RE = re.compile(r'\.add\(\w+,\s*"[^"]*",\s*"[^"]*",\s*"((?:[^"\\]|\\.)*)"')
+SIDEBAR_LABEL_RE = re.compile(r'\b(?:label|section):\s*"((?:[^"\\]|\\.)*)"')
+
+# page titles go through {{.T.Get .Title}} in base.html
+PAGE_TITLE_RE = re.compile(r'(?:BuildLayoutData\(a, w, r|renderTerminalPage\(a, w, r, \w+),\s*"((?:[^"\\]|\\.)*)"\s*[,)]')
+
+# positional {"conf", "service", "Page Title"} entries
+WEBSERVERCONF_GO = "internal/modules/webserverconf/webserverconf.go"
+WEBSERVERCONF_RE = re.compile(r'\{"[^"]*",\s*"[^"]*",\s*"((?:[^"\\]|\\.)*)"\}')
+
+# service status badges {"color", "Label"} translated by StatusColorLabel
+SERVICES_RENDER_GO = "internal/modules/services/render.go"
+SERVICE_STATUS_RE = re.compile(r'\{"[a-z]+-\d+",\s*"((?:[^"\\]|\\.)*)"\}')
+
+# empty-state text returned by the *ContainerStatusDetail funcs, rendered via {{$.T.Get .StatusDetail}}
+STATUS_DETAIL_FUNC_RE = re.compile(r'func \w+(?:ContainerStatusDetail|WarningFlashMessage)\(.*?\n\}', re.S)
+
+# flash messages are translated at display time, so any whole-literal sentence argument to a flash helper counts
+FLASH_CALL_RE = re.compile(r'\b(?:flash\.Add|(?!Test)\w*[Ff]lash\w*)\(')
+
+# request-locale translations built outside templates: web.Tr(a, r, "Deleted %(name)s", "name", n)
+WEB_TR_RE = re.compile(r'\bTr\(\s*\w+,\s*\w+,\s*"((?:[^"\\]|\\.)*)"')
+FLASH_ARG_RE = re.compile(r'(?:^|,)\s*"((?:[^"\\]|\\.)*)"\s*(?=,|$)')
 
 WEBSITES_RENDER_DISPATCH_GO = "internal/modules/websites/render_dispatch.go"
 SECURITY_TOGGLE_RE = re.compile(r'\{"([^"]*)",\s*"((?:[^"\\]|\\.)*)",\s*\n\s*"((?:[^"\\]|\\.)*)"\}')
@@ -84,6 +114,8 @@ def extract(source_root):
                 with open(full, encoding="utf-8", errors="replace") as f:
                     lines = f.readlines()
                 for i, line in enumerate(lines, 1):
+                    for m in TMPL_DICT_RE.finditer(line):
+                        add(results, m.group(1), None, rel, i)
                     for m in TMPL_GETN.finditer(line):
                         add(results, m.group(1), m.group(2), rel, i)
                     for m in TMPL_GET.finditer(line):
@@ -98,6 +130,21 @@ def extract(source_root):
                         add(results, m.group(1), None, rel, i)
                     for m in FIELD_RE.finditer(line):
                         add(results, m.group(1), None, rel, i)
+                    for m in PAGE_TITLE_RE.finditer(line):
+                        add(results, m.group(1), None, rel, i)
+                    for m in WEB_TR_RE.finditer(line):
+                        add(results, m.group(1), None, rel, i)
+                    for m in ASSIGN_RE.finditer(line.rstrip()):
+                        if " " in m.group(1):
+                            add(results, m.group(1), None, rel, i)
+                content = "".join(lines)
+                for m in STATUS_DETAIL_FUNC_RE.finditer(content):
+                    base = content[: m.start()].count("\n") + 1
+                    for r in RETURN_STR_RE.finditer(m.group(0)):
+                        if r.group(1):
+                            add(results, r.group(1), None, rel, base + m.group(0)[: r.start()].count("\n"))
+                for msgid, lineno in flash_literals(content):
+                    add(results, msgid, None, rel, lineno)
 
     # Positional SectionItem literals in sections.go: {"key","href","icon","Label","target"}
     sections_path = os.path.join(source_root, SECTIONS_GO)
@@ -106,6 +153,15 @@ def extract(source_root):
             for i, line in enumerate(f, 1):
                 for m in SECTIONS_ITEM_RE.finditer(line):
                     add(results, m.group(1), None, SECTIONS_GO, i)
+
+    sidebar_path = os.path.join(source_root, SIDEBAR_GO)
+    if os.path.isfile(sidebar_path):
+        with open(sidebar_path, encoding="utf-8") as f:
+            for i, line in enumerate(f, 1):
+                for m in SIDEBAR_ADD_RE.finditer(line):
+                    add(results, m.group(1), None, SIDEBAR_GO, i)
+                for m in SIDEBAR_LABEL_RE.finditer(line):
+                    add(results, m.group(1), None, SIDEBAR_GO, i)
 
     # Positional SecurityToggle literals: {"id", "Label", "TechDetails"}
     toggles_path = os.path.join(source_root, WEBSITES_RENDER_DISPATCH_GO)
@@ -117,6 +173,14 @@ def extract(source_root):
             add(results, m.group(2), None, WEBSITES_RENDER_DISPATCH_GO, line)
             add(results, m.group(3), None, WEBSITES_RENDER_DISPATCH_GO, line)
 
+    for relpath, regex in ((WEBSERVERCONF_GO, WEBSERVERCONF_RE), (SERVICES_RENDER_GO, SERVICE_STATUS_RE)):
+        path = os.path.join(source_root, relpath)
+        if os.path.isfile(path):
+            with open(path, encoding="utf-8") as f:
+                for i, line in enumerate(f, 1):
+                    for m in regex.finditer(line):
+                        add(results, m.group(1), None, relpath, i)
+
     # webauthn.go literal `return "..."` reasons
     webauthn_path = os.path.join(source_root, WEBAUTHN_GO)
     if os.path.isfile(webauthn_path):
@@ -127,6 +191,45 @@ def extract(source_root):
                         add(results, m.group(1), None, WEBAUTHN_GO, i)
 
     return results
+
+
+def flash_literals(content):
+    """Yield (msgid, line) for sentence-like whole string-literal args of flash helper calls."""
+    for m in FLASH_CALL_RE.finditer(content):
+        if content[max(0, m.start() - 5): m.start()] == "func ":
+            continue
+        depth, i, start = 1, m.end(), m.end()
+        while i < len(content) and depth:
+            c = content[i]
+            if c == '"':
+                i += 1
+                while i < len(content) and content[i] != '"':
+                    i += 2 if content[i] == "\\" else 1
+            elif c == "`":
+                i = content.index("`", i + 1)
+            elif c in "([{":
+                depth += 1
+            elif c in ")]}":
+                depth -= 1
+            i += 1
+        args = content[start: i - 1]
+        # swap literals for placeholders so parens inside strings don't count, then keep only top-level args
+        lits = []
+        masked = re.sub(r'"(?:[^"\\]|\\.)*"', lambda x: lits.append(x.group(0)) or "\x00%d\x00" % (len(lits) - 1), args)
+        flat, d = [], 0
+        for ch in masked:
+            if ch in "([{":
+                d += 1
+            elif ch in ")]}":
+                d -= 1
+                continue
+            if d == 0:
+                flat.append(ch)
+        top = re.sub(r"\x00(\d+)\x00", lambda x: lits[int(x.group(1))], "".join(flat)).replace("\n", " ")
+        for a in FLASH_ARG_RE.finditer(top):
+            text = a.group(1)
+            if " " in text and re.match(r"[A-Z]", text):
+                yield text, content[: start].count("\n") + 1
 
 
 # --- pot/po generation --------------------------------------------------
