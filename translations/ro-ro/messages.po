@@ -19976,3 +19976,27 @@ msgstr ""
 #: website/scripts/panel-screenshots/emails/render.go:100
 msgid "Emails sent in the last hour"
 msgstr ""
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:407
+msgid "Scheduler"
+msgstr "Planificator"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:412
+msgid "Scheduler on"
+msgstr "Planificator activat"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:411
+msgid ""
+"Runs php flarum schedule:run every minute, needed by extensions that do "
+"scheduled tasks or queue jobs."
+msgstr ""
+"Rulează php flarum schedule:run în fiecare minut, necesar extensiilor care "
+"execută sarcini programate sau joburi din coadă."
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:419
+msgid "View in Cron Jobs"
+msgstr "Vezi în Cron Jobs"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:449
+msgid "Failed to update the scheduler"
+msgstr "Actualizarea planificatorului a eșuat"

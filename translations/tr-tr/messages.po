@@ -19842,3 +19842,27 @@ msgstr ""
 #: website/scripts/panel-screenshots/emails/render.go:100
 msgid "Emails sent in the last hour"
 msgstr ""
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:407
+msgid "Scheduler"
+msgstr "Zamanlayıcı"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:412
+msgid "Scheduler on"
+msgstr "Zamanlayıcı açık"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:411
+msgid ""
+"Runs php flarum schedule:run every minute, needed by extensions that do "
+"scheduled tasks or queue jobs."
+msgstr ""
+"Her dakika php flarum schedule:run komutunu çalıştırır, zamanlanmış görevler"
+" veya kuyruk işleri yapan eklentiler için gereklidir."
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:419
+msgid "View in Cron Jobs"
+msgstr "Cron İşleri'nde görüntüle"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:449
+msgid "Failed to update the scheduler"
+msgstr "Zamanlayıcı güncellenemedi"

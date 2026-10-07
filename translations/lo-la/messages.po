@@ -19530,3 +19530,27 @@ msgstr ""
 #: website/scripts/panel-screenshots/emails/render.go:100
 msgid "Emails sent in the last hour"
 msgstr ""
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:407
+msgid "Scheduler"
+msgstr "ຕົວຈັດຕາຕະລາງ"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:412
+msgid "Scheduler on"
+msgstr "ເປີດຕົວຈັດຕາຕະລາງ"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:411
+msgid ""
+"Runs php flarum schedule:run every minute, needed by extensions that do "
+"scheduled tasks or queue jobs."
+msgstr ""
+"ແລ່ນ php flarum schedule:run ທຸກໆນາທີ, "
+"ຈຳເປັນສຳລັບສ່ວນຂະຫຍາຍທີ່ເຮັດວຽກຕາມກຳນົດເວລາ ຫຼື ວຽກໃນຄິວ."
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:419
+msgid "View in Cron Jobs"
+msgstr "ເບິ່ງໃນ ວຽກອັດຕະໂນມັດ (Cron Jobs)"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:449
+msgid "Failed to update the scheduler"
+msgstr "ອັບເດດຕົວຈັດຕາຕະລາງບໍ່ສຳເລັດ"

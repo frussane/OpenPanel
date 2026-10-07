@@ -19901,3 +19901,27 @@ msgstr ""
 #: website/scripts/panel-screenshots/emails/render.go:100
 msgid "Emails sent in the last hour"
 msgstr ""
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:407
+msgid "Scheduler"
+msgstr "Agendador"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:412
+msgid "Scheduler on"
+msgstr "Agendador ativado"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:411
+msgid ""
+"Runs php flarum schedule:run every minute, needed by extensions that do "
+"scheduled tasks or queue jobs."
+msgstr ""
+"Executa php flarum schedule:run a cada minuto, necessário para extensões que"
+" realizam tarefas agendadas ou trabalhos em fila."
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:419
+msgid "View in Cron Jobs"
+msgstr "Ver em Jobs Cron"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:449
+msgid "Failed to update the scheduler"
+msgstr "Falha ao atualizar o agendador"

@@ -19712,3 +19712,27 @@ msgstr ""
 #: website/scripts/panel-screenshots/emails/render.go:100
 msgid "Emails sent in the last hour"
 msgstr ""
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:407
+msgid "Scheduler"
+msgstr "अनुसूचक"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:412
+msgid "Scheduler on"
+msgstr "अनुसूचक सक्रिय"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:411
+msgid ""
+"Runs php flarum schedule:run every minute, needed by extensions that do "
+"scheduled tasks or queue jobs."
+msgstr ""
+"हरेक मिनेट php flarum schedule:run चलाउँछ, निर्धारित कार्यहरू वा कतार "
+"कार्यहरू गर्ने एक्सटेन्सनहरूका लागि आवश्यक।"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:419
+msgid "View in Cron Jobs"
+msgstr "Cron Jobs मा हेर्नुहोस्"
+
+#: openpanel/internal/web/templates/manager/flarum_app.html:449
+msgid "Failed to update the scheduler"
+msgstr "अनुसूचक अद्यावधिक गर्न असफल"
