@@ -19,6 +19,7 @@ services:
       - html_data:/var/www/html/
       - /etc/openpanel/nginx/certs/:/etc/nginx/ssl/
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/composer/v2_composer.phar:/usr/local/bin/composer:ro
       - ./php.ini/7.4.ini:/usr/local/lsws/lsphp74/etc/php/7.4/litespeed/php.ini
       - ./php.ini/8.0.ini:/usr/local/lsws/lsphp80/etc/php/8.0/litespeed/php.ini
@@ -237,14 +238,15 @@ services:
       - "${MYSQL_PORT}"     
     volumes:
       - mysql_data:/var/lib/mysql
-      - mysql_dumps:/tmp/dumps/  
+      - mysql_dumps:/tmp/dumps/
+      - backup_meta:/tmp/backup_meta/
       - /etc/openpanel/mysql/scripts/dump.sh:/dump.sh:ro
       - ./sockets/mysqld:/var/run/mysqld
       - ./my.cnf:/root/.my.cnf:ro
       - ./custom.cnf:/etc/mysql/conf.d/custom.cnf
     labels:
       - docker-volume-backup.archive-pre=/bin/sh -c '/dump.sh'
-      - docker-volume-backup.archive-post=/bin/sh -c 'rm -rf /tmp/dumps/*'
+      - docker-volume-backup.archive-post=/bin/sh -c 'rm -rf /tmp/dumps/* /tmp/backup_meta/mysql.json'
     deploy:
       resources:
         limits:
@@ -272,13 +274,14 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - mysql_dumps:/tmp/dumps/
+      - backup_meta:/tmp/backup_meta/
       - /etc/openpanel/mysql/scripts/dump.sh:/dump.sh:ro
       - ./sockets/mysqld:/var/run/mysqld
       - ./my.cnf:/root/.my.cnf:ro
       - ./custom.cnf:/etc/mysql/conf.d/custom.cnf
     labels:
       - docker-volume-backup.archive-pre=/bin/sh -c '/dump.sh'
-      - docker-volume-backup.archive-post=/bin/sh -c 'rm -rf /tmp/dumps/*'
+      - docker-volume-backup.archive-post=/bin/sh -c 'rm -rf /tmp/dumps/* /tmp/backup_meta/mysql.json'
     deploy:
       resources:
         limits:
@@ -297,6 +300,9 @@ services:
   postgres:
     image: postgres:${POSTGRES_VERSION:-latest}
     container_name: postgres
+    labels:
+      - docker-volume-backup.archive-pre=/bin/sh -c '/dump.sh'
+      - docker-volume-backup.archive-post=/bin/sh -c 'rm -rf /tmp/dumps/* /tmp/backup_meta/postgres.json'
     hostname: postgres
     restart: unless-stopped
     environment:
@@ -306,6 +312,9 @@ services:
       - "${POSTGRES_PORT}"
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - pg_dumps:/tmp/dumps/
+      - backup_meta:/tmp/backup_meta/
+      - /etc/openpanel/postgres/scripts/dump.sh:/dump.sh:ro
       - ./sockets/postgres:/var/run/postgresql
       #- ./postgre_custom.conf:/var/lib/postgresql/data/postgresql.conf
     deploy:
@@ -474,6 +483,7 @@ services:
       - ./php.ini/5.6.ini:/usr/local/etc/php/php.ini
       - ./php.ini/5.6.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_5.6.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -481,7 +491,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -506,6 +515,7 @@ services:
       - ./php.ini/7.0.ini:/usr/local/etc/php/php.ini
       - ./php.ini/7.0.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.0.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -513,7 +523,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -538,6 +547,7 @@ services:
       - ./php.ini/7.1.ini:/usr/local/etc/php/php.ini
       - ./php.ini/7.1.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.1.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro      
     environment:
@@ -545,7 +555,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -571,6 +580,7 @@ services:
       - ./php.ini/7.2.ini:/usr/local/etc/php/php.ini
       - ./php.ini/7.2.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.2.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -578,7 +588,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -605,6 +614,7 @@ services:
       - ./php.ini/7.3.ini:/usr/local/etc/php/php.ini
       - ./php.ini/7.3.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.3.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -612,7 +622,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -638,6 +647,7 @@ services:
       - ./php.ini/7.4.ini:/usr/local/etc/php/php.ini
       - ./php.ini/7.4.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.4.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -645,7 +655,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -669,13 +678,13 @@ services:
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.0.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.0.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
-      - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro   
+      - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
     environment:
       - APP_USER=root
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -702,6 +711,7 @@ services:
       - ./php.ini/8.1.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.1.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.1.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -709,7 +719,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -736,6 +745,7 @@ services:
       - ./php.ini/8.2.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.2.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.2.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -743,7 +753,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -769,6 +778,7 @@ services:
       - ./php.ini/8.3.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.3.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.3.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro      
     environment:
@@ -776,7 +786,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -801,6 +810,7 @@ services:
       - ./php.ini/8.4.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.4.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.4.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -808,7 +818,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -835,6 +844,7 @@ services:
       - ./php.ini/8.5.ini:/usr/local/etc/php/php.ini
       - ./php.ini/8.5.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
+      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.5.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
     environment:
@@ -842,7 +852,6 @@ services:
       - APP_GROUP=root
       - APP_UID=${USER_ID:-0}
       - APP_GID=${USER_ID:-0}
-      - ENABLE_TUNING_FPM=1
     deploy:
       resources:
         limits:
@@ -887,6 +896,9 @@ services:
 
   backup:
     image: offen/docker-volume-backup:v2
+    labels:
+      - docker-volume-backup.archive-pre=/bin/sh /files-list.sh
+      - docker-volume-backup.archive-post=/bin/sh -c 'rm -f /tmp/backup_meta/files.tsv /tmp/backup_meta/mail.tsv /tmp/backup_meta/vhosts.tsv /tmp/backup_meta/dns.tsv'
     container_name: backup
     healthcheck:
       disable: true
@@ -905,7 +917,10 @@ services:
       - mysql_dumps:/backup/mysql:ro
       - mail_data:/backup/mail:ro
       - webserver_data:/backup/vhosts:ro
-      - pg_data:/backup/postgres:ro
+      - pg_dumps:/backup/postgres:ro
+      - backup_meta:/backup/00-meta:ro
+      - backup_meta:/tmp/backup_meta/
+      - /etc/openpanel/backups/scripts/files-list.sh:/files-list.sh:ro
       - ./crons.ini:/backup/crons.ini:ro
       - /etc/openpanel/backups/customized.template:/etc/dockervolumebackup/notifications.d/01.template:ro
     deploy:
@@ -948,6 +963,16 @@ volumes:
     labels:
       description: "This volume holds the mysql/mariadb databases."
       purpose: "database"
+  pg_dumps:
+    driver: local
+    labels:
+      description: "This volume holds the .sql dumps of postgres databases during backup."
+      purpose: "storage"
+  backup_meta:
+    driver: local
+    labels:
+      description: "This volume holds the list of dumped databases that goes first in every backup archive."
+      purpose: "storage"
   mysql_dumps:
     driver: local
     labels:
