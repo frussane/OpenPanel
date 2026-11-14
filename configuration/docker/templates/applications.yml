@@ -143,3 +143,605 @@ applications:
       - POSTGRES_PASSWORD=change-this-password
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+
+  - id: open-webui
+    name: Open WebUI
+    description: ChatGPT-style web interface for AI models, connects to OpenAI-compatible APIs and Ollama. The first account you register becomes the admin.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/open-webui.svg
+    docs: https://docs.openwebui.com/
+    image: ghcr.io/open-webui/open-webui:main
+    service: openwebui
+    cpu: "1"
+    ram: "1.5"
+    pids: 500
+    port: 8080
+    networks: [www]
+    volumes:
+      - openwebui_data:/app/backend/data
+    env:
+      - WEBUI_URL=https://{domain}
+      - ENABLE_OLLAMA_API=false
+
+  - id: langflow
+    name: Langflow
+    description: Visual builder for AI agents and RAG workflows, drag and drop components and serve them as an API. Log in with the LANGFLOW_SUPERUSER values.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/langflow.png
+    docs: https://docs.langflow.org/
+    image: langflowai/langflow:latest
+    service: langflow
+    cpu: "1"
+    ram: "2"
+    pids: 500
+    port: 7860
+    networks: [www]
+    volumes:
+      - langflow_data:/app/langflow
+    env:
+      - LANGFLOW_CONFIG_DIR=/app/langflow
+      - LANGFLOW_DATABASE_URL=sqlite:////app/langflow/langflow.db
+      - LANGFLOW_AUTO_LOGIN=false
+      - LANGFLOW_SUPERUSER=admin
+      - LANGFLOW_SUPERUSER_PASSWORD=change-this-password
+
+  - id: excalidraw
+    name: Excalidraw
+    description: Virtual whiteboard for hand-drawn style diagrams and sketches, drawings are kept in the browser or exported as files.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/excalidraw.svg
+    docs: https://github.com/excalidraw/excalidraw
+    image: excalidraw/excalidraw:latest
+    service: excalidraw
+    cpu: "0.25"
+    ram: "256M"
+    pids: 100
+    port: 80
+    networks: [www]
+
+  - id: stirling-pdf
+    name: Stirling PDF
+    description: Web toolbox for PDF files, merge, split, convert, compress, sign and OCR, files are processed on your server. Log in as admin with password stirling and change it right away.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/stirling-pdf.svg
+    docs: https://docs.stirlingpdf.com/
+    image: stirlingtools/stirling-pdf:latest
+    service: stirlingpdf
+    cpu: "1"
+    ram: "1.5"
+    pids: 500
+    port: 8080
+    networks: [www]
+    volumes:
+      - stirlingpdf_configs:/configs
+    env:
+      - LANGS=en_GB
+
+  - id: nextchat
+    name: NextChat
+    description: Lightweight ChatGPT-style chat for OpenAI and other providers. Put your API key in OPENAI_API_KEY and a password in CODE, visitors need that password to use your key.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/ChatGPTNextWeb/NextChat/public/android-chrome-192x192.png
+    docs: https://github.com/ChatGPTNextWeb/NextChat
+    image: yidadaa/chatgpt-next-web:latest
+    service: nextchat
+    cpu: "0.5"
+    ram: "512M"
+    pids: 200
+    port: 3000
+    networks: [www]
+    env:
+      - OPENAI_API_KEY=
+      - CODE=change-this-password
+
+  - id: grafana
+    name: Grafana
+    description: Dashboards and alerts for metrics, logs and databases, connects to Prometheus, MySQL, PostgreSQL and many other sources. Log in with the GF_SECURITY_ADMIN values.
+    category: Monitoring
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/grafana.svg
+    docs: https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
+    image: grafana/grafana-oss:latest
+    service: grafana
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 3000
+    networks: [www, db]
+    volumes:
+      - grafana_data:/var/lib/grafana
+    env:
+      - GF_SERVER_ROOT_URL=https://{domain}/
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=change-this-password
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+
+  - id: anythingllm
+    name: AnythingLLM
+    description: Chat with your documents using any LLM provider, with workspaces, RAG and AI agents. You pick the LLM and set the admin password in the setup wizard.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/anything-llm.svg
+    docs: https://docs.anythingllm.com/installation-docker/overview
+    image: mintplexlabs/anythingllm:latest
+    service: anythingllm
+    cpu: "1"
+    ram: "1.5"
+    pids: 500
+    port: 3001
+    networks: [www]
+    volumes:
+      - anythingllm_storage:/app/server/storage
+    env:
+      - STORAGE_DIR=/app/server/storage
+
+  - id: nocodb
+    name: NocoDB
+    description: Spreadsheet-style interface on top of a database, an open source Airtable alternative. Data is kept in SQLite in the volume, the first account you sign up with becomes the owner.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nocodb.svg
+    docs: https://nocodb.com/docs/self-hosting/installation/docker
+    image: nocodb/nocodb:latest
+    service: nocodb
+    cpu: "0.5"
+    ram: "1"
+    pids: 300
+    port: 8080
+    networks: [www, db]
+    volumes:
+      - nocodb_data:/usr/app/data
+    env:
+      - NC_PUBLIC_URL=https://{domain}
+      - NC_DISABLE_TELE=true
+
+  - id: litellm
+    name: LiteLLM
+    description: OpenAI-compatible gateway in front of 100+ LLM providers, with virtual keys, budgets and usage tracking. Needs the account's PostgreSQL service, create a database and user first and put them in DATABASE_URL. Log in to /ui as admin with the LITELLM_MASTER_KEY.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/litellm.svg
+    docs: https://docs.litellm.ai/docs/proxy/deploy
+    image: ghcr.io/berriai/litellm:main-stable
+    service: litellm
+    cpu: "1"
+    ram: "1"
+    pids: 500
+    port: 4000
+    networks: [www, db]
+    env:
+      - DATABASE_URL=postgresql://litellm:change-this-password@postgres:5432/litellm
+      - LITELLM_MASTER_KEY=sk-change-this-key
+      - LITELLM_SALT_KEY=sk-change-this-salt
+      - STORE_MODEL_IN_DB=True
+
+  - id: pocketbase
+    name: PocketBase
+    description: Open source backend in one file, with a realtime database, authentication, file storage and an admin dashboard at /_/. Create the first superuser with the setup link printed in the container logs.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/pocketbase.svg
+    docs: https://pocketbase.io/docs/
+    image: ghcr.io/muchobien/pocketbase:latest
+    service: pocketbase
+    cpu: "0.5"
+    ram: "256M"
+    pids: 200
+    port: 8090
+    networks: [www]
+    volumes:
+      - pocketbase_data:/pb_data
+      - pocketbase_public:/pb_public
+
+  - id: meilisearch
+    name: Meilisearch
+    description: Fast search engine with a REST API, typo tolerance and filters, for adding search to websites and apps. Set a MEILI_MASTER_KEY of at least 16 characters, API requests need it.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/meilisearch.svg
+    docs: https://www.meilisearch.com/docs/learn/self_hosted/install_meilisearch_locally
+    image: getmeili/meilisearch:latest
+    service: meilisearch
+    cpu: "0.5"
+    ram: "512M"
+    pids: 200
+    port: 7700
+    networks: [www]
+    volumes:
+      - meilisearch_data:/meili_data
+    env:
+      - MEILI_ENV=production
+      - MEILI_MASTER_KEY=change-this-master-key
+      - MEILI_NO_ANALYTICS=true
+
+  - id: jellyfin
+    name: Jellyfin
+    description: Media server for your movies, shows and music, streams to browsers, phones and TVs. Put your media in the jellyfin_media volume, the setup wizard creates the admin account.
+    category: Media
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/jellyfin.svg
+    docs: https://jellyfin.org/docs/general/installation/container
+    image: jellyfin/jellyfin:latest
+    service: jellyfin
+    cpu: "1"
+    ram: "1"
+    pids: 500
+    port: 8096
+    networks: [www]
+    volumes:
+      - jellyfin_config:/config
+      - jellyfin_cache:/cache
+      - jellyfin_media:/media
+    env:
+      - JELLYFIN_PublishedServerUrl=https://{domain}
+
+  - id: joplin
+    name: Joplin Server
+    description: Sync server for the Joplin note taking apps, with sharing and note publishing. Needs the account's PostgreSQL service, create a database and user first and put them in the POSTGRES_ values. Log in as admin@localhost with password admin and change it.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/joplin.svg
+    docs: https://github.com/laurent22/joplin/blob/dev/packages/server/README.md
+    image: joplin/server:latest
+    service: joplin
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 22300
+    networks: [www, db]
+    env:
+      - APP_BASE_URL=https://{domain}
+      - APP_PORT=22300
+      - DB_CLIENT=pg
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=joplin
+      - POSTGRES_USER=joplin
+      - POSTGRES_PASSWORD=change-this-password
+
+  - id: ghost
+    name: Ghost
+    description: Publishing platform for blogs, newsletters and paid memberships. Uses SQLite in the volume, open /ghost to create the admin account. Set the mail__ values for newsletters and member logins.
+    category: CMS
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/ghost.png
+    docs: https://ghost.org/docs/config/
+    image: ghost:6-alpine
+    service: ghost
+    cpu: "1"
+    ram: "768M"
+    pids: 300
+    port: 2368
+    networks: [www]
+    volumes:
+      - ghost_content:/var/lib/ghost/content
+    env:
+      - url=https://{domain}
+      - database__client=sqlite3
+      - database__connection__filename=/var/lib/ghost/content/data/ghost.db
+      - database__useNullAsDefault=true
+      - mail__transport=SMTP
+      - mail__from=noreply@{domain}
+      - mail__options__host=
+      - mail__options__port=587
+      - mail__options__auth__user=
+      - mail__options__auth__pass=
+
+  - id: flowise
+    name: Flowise
+    description: Low-code builder for LLM apps, chatbots and AI agents with a drag and drop editor. The first visit asks you to create the admin account.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/flowise.svg
+    docs: https://docs.flowiseai.com/getting-started
+    # 3.1.4 crashes on start, FlowiseAI/Flowise#6688
+    image: flowiseai/flowise:3.1.3
+    service: flowise
+    cpu: "1"
+    ram: "1"
+    pids: 500
+    port: 3000
+    networks: [www]
+    volumes:
+      - flowise_data:/home/node/.flowise
+    env:
+      - PORT=3000
+      - APP_URL=https://{domain}
+
+  - id: huginn
+    name: Huginn
+    description: Build agents that watch websites, feeds and APIs and act on what they find, a self-hosted IFTTT. Needs the account's MySQL or MariaDB service, create a database and user first and put them in the DATABASE_ values, DATABASE_HOST is mariadb when the account runs MariaDB. Log in as admin, the generated password is printed in the container logs on the first start.
+    category: Automation
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/huginn.svg
+    docs: https://github.com/huginn/huginn/blob/master/doc/docker/install.md
+    image: huginn/huginn:latest
+    service: huginn
+    cpu: "1"
+    ram: "1"
+    pids: 500
+    port: 3000
+    networks: [www, db]
+    env:
+      - DOMAIN={domain}
+      - FORCE_SSL=true
+      - TIMEZONE=UTC
+      - DATABASE_ADAPTER=mysql2
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=huginn
+      - DATABASE_USERNAME=huginn
+      - DATABASE_PASSWORD=change-this-password
+
+  - id: metabase
+    name: Metabase
+    description: Business intelligence dashboards and questions on top of your MySQL, PostgreSQL and other databases, no SQL needed. The setup wizard creates the admin account, its own settings are kept in the volume.
+    category: Analytics
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/metabase.svg
+    docs: https://www.metabase.com/docs/latest/installation-and-operation/running-metabase-on-docker
+    image: metabase/metabase:latest
+    service: metabase
+    cpu: "1"
+    ram: "1.5"
+    pids: 500
+    port: 3000
+    networks: [www, db]
+    volumes:
+      - metabase_data:/metabase-data
+    env:
+      - MB_DB_FILE=/metabase-data/metabase.db
+      - MB_SITE_URL=https://{domain}
+      - JAVA_TIMEZONE=UTC
+
+  - id: paperless-ngx
+    name: Paperless-ngx
+    description: Document management, scans and PDFs get OCR, tags and full text search. Needs the account's Redis service running. Set a long random PAPERLESS_SECRET_KEY and the admin password before installing.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/paperless-ngx.svg
+    docs: https://docs.paperless-ngx.com/setup/#docker
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    service: paperless
+    cpu: "1"
+    ram: "1.5"
+    pids: 500
+    port: 8000
+    networks: [www, db]
+    volumes:
+      - paperless_data:/usr/src/paperless/data
+      - paperless_media:/usr/src/paperless/media
+      - paperless_consume:/usr/src/paperless/consume
+      - paperless_export:/usr/src/paperless/export
+    env:
+      - PAPERLESS_URL=https://{domain}
+      - PAPERLESS_REDIS=redis://redis:6379
+      - PAPERLESS_SECRET_KEY=change-this-to-a-long-random-string
+      - PAPERLESS_ADMIN_USER=admin
+      - PAPERLESS_ADMIN_PASSWORD=change-this-password
+      - PAPERLESS_TIME_ZONE=UTC
+      - PAPERLESS_OCR_LANGUAGE=eng
+
+  - id: gogs
+    name: Gogs
+    description: Painless self-hosted Git service, small and fast. Pick SQLite3 in the install wizard and set the domain as the application URL, SSH is not available so use HTTPS for cloning.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/gogs.png
+    docs: https://github.com/gogs/gogs/tree/main/docker
+    image: gogs/gogs:latest
+    service: gogs
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 3000
+    networks: [www, db]
+    volumes:
+      - gogs_data:/data
+
+  - id: rsshub
+    name: RSSHub
+    description: Generates RSS feeds for thousands of websites and social networks that don't have one. Set ACCESS_KEY to keep strangers from using your instance.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/rsshub.svg
+    docs: https://docs.rsshub.app/deploy/
+    image: diygod/rsshub:latest
+    service: rsshub
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 1200
+    networks: [www]
+    env:
+      - NODE_ENV=production
+      - CACHE_TYPE=memory
+      - ACCESS_KEY=change-this-key
+
+  - id: it-tools
+    name: IT-Tools
+    description: Collection of handy tools for developers, converters, generators, encoders and formatters, everything runs in the browser.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/it-tools.svg
+    docs: https://github.com/CorentinTh/it-tools
+    image: corentinth/it-tools:latest
+    service: ittools
+    cpu: "0.25"
+    ram: "128M"
+    pids: 100
+    port: 80
+    networks: [www]
+
+  - id: drawdb
+    name: drawDB
+    description: Database diagram editor in the browser, design tables and relations and export SQL for MySQL, PostgreSQL, SQLite and more.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/drawdb-io/drawdb/src/assets/icon_dark_64.png
+    docs: https://github.com/drawdb-io/drawdb
+    image: ghcr.io/drawdb-io/drawdb:latest
+    service: drawdb
+    cpu: "0.25"
+    ram: "128M"
+    pids: 100
+    port: 80
+    networks: [www]
+
+  - id: trilium
+    name: Trilium Notes
+    description: Hierarchical note taking for building a personal knowledge base, with rich text, code notes, scripting and sync. The first visit asks you to set the password.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/trilium.svg
+    docs: https://docs.triliumnotes.org/
+    image: triliumnext/trilium:latest
+    service: trilium
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 8080
+    networks: [www]
+    volumes:
+      - trilium_data:/home/node/trilium-data
+
+  - id: cyberchef
+    name: CyberChef
+    description: The cyber swiss army knife, chain operations to encode, decode, encrypt, compress and analyse data, everything runs in the browser.
+    category: Security
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/cyberchef.svg
+    docs: https://github.com/gchq/CyberChef
+    image: ghcr.io/gchq/cyberchef:latest
+    service: cyberchef
+    cpu: "0.25"
+    ram: "128M"
+    pids: 100
+    port: 8080
+    networks: [www]
+
+  - id: changedetection
+    name: changedetection.io
+    description: Watches web pages for changes and notifies you by email, Discord, Telegram and more. It opens without a password, set one under Settings right after installing.
+    category: Monitoring
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/changedetection.svg
+    docs: https://github.com/dgtlmoon/changedetection.io/wiki
+    image: ghcr.io/dgtlmoon/changedetection.io:latest
+    service: changedetection
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 5000
+    networks: [www]
+    volumes:
+      - changedetection_data:/datastore
+    env:
+      - BASE_URL=https://{domain}
+      - USE_X_SETTINGS=1
+
+  - id: qdrant
+    name: Qdrant
+    description: Vector database for AI search and RAG, with a REST API and a web dashboard at /dashboard. Set QDRANT__SERVICE__API_KEY, requests and the dashboard need it.
+    category: AI
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/qdrant.svg
+    docs: https://qdrant.tech/documentation/guides/installation/
+    image: qdrant/qdrant:latest
+    service: qdrant
+    cpu: "0.5"
+    ram: "1"
+    pids: 300
+    port: 6333
+    networks: [www, db]
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    env:
+      - QDRANT__SERVICE__API_KEY=change-this-api-key
+      - QDRANT__TELEMETRY_DISABLED=true
+
+  - id: umami
+    name: Umami
+    description: Simple, privacy-friendly web analytics without cookies, a Google Analytics alternative. Needs the account's PostgreSQL service, create a database and user first and put them in DATABASE_URL. Log in as admin with password umami and change it.
+    category: Analytics
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/umami.svg
+    docs: https://umami.is/docs/install
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    service: umami
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 3000
+    networks: [www, db]
+    env:
+      - DATABASE_URL=postgresql://umami:change-this-password@postgres:5432/umami
+      - APP_SECRET=change-this-to-a-long-random-string
+
+  - id: searxng
+    name: SearXNG
+    description: Private metasearch engine, combines results from 70+ search engines without tracking or profiling you.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/searxng.svg
+    docs: https://docs.searxng.org/admin/installation-docker.html
+    image: searxng/searxng:latest
+    service: searxng
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 8080
+    networks: [www]
+    volumes:
+      - searxng_config:/etc/searxng
+      - searxng_cache:/var/cache/searxng
+    env:
+      - SEARXNG_BASE_URL=https://{domain}/
+
+  - id: actual-budget
+    name: Actual Budget
+    description: Local-first personal finance and envelope budgeting, with sync between your devices. The first visit asks you to set the server password.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/actual-budget.svg
+    docs: https://actualbudget.org/docs/install/docker
+    image: ghcr.io/actualbudget/actual:latest
+    service: actualbudget
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 5006
+    networks: [www]
+    volumes:
+      - actualbudget_data:/data
+
+  - id: beszel
+    name: Beszel
+    description: Lightweight server monitoring hub with history, Docker stats and alerts, the agents on your servers report to it. The first visit asks you to create the admin account.
+    category: Monitoring
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/beszel.svg
+    docs: https://beszel.dev/guide/getting-started
+    image: henrygd/beszel:latest
+    service: beszel
+    cpu: "0.5"
+    ram: "256M"
+    pids: 200
+    port: 8090
+    networks: [www]
+    volumes:
+      - beszel_data:/beszel_data
+    env:
+      - APP_URL=https://{domain}
+
+  - id: typesense
+    name: Typesense
+    description: Typo-tolerant search engine with a REST API, an easier Algolia and Elasticsearch alternative. Set TYPESENSE_API_KEY, every request needs it.
+    category: Development
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/typesense.svg
+    docs: https://typesense.org/docs/guide/install-typesense.html
+    image: typesense/typesense:30.2
+    service: typesense
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 8108
+    networks: [www]
+    volumes:
+      - typesense_data:/data
+    env:
+      - TYPESENSE_DATA_DIR=/data
+      - TYPESENSE_API_KEY=change-this-api-key
+      - TYPESENSE_ENABLE_CORS=true
+
+  - id: dashy
+    name: Dashy
+    description: Customizable start page for your self-hosted apps and links, with status checks, widgets and themes. The layout is edited in the browser and kept in the volume.
+    category: Productivity
+    logo: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/dashy.png
+    docs: https://dashy.to/docs/deployment
+    image: lissy93/dashy:latest
+    service: dashy
+    cpu: "0.5"
+    ram: "512M"
+    pids: 300
+    port: 8080
+    networks: [www]
+    volumes:
+      - dashy_data:/app/user-data
