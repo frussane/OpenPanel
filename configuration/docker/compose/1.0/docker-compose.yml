@@ -19,7 +19,6 @@ services:
       - html_data:/var/www/html/
       - /etc/openpanel/nginx/certs/:/etc/nginx/ssl/
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/composer/v2_composer.phar:/usr/local/bin/composer:ro
       - ./php.ini/7.4.ini:/usr/local/lsws/lsphp74/etc/php/7.4/litespeed/php.ini
       - ./php.ini/8.0.ini:/usr/local/lsws/lsphp80/etc/php/8.0/litespeed/php.ini
@@ -98,6 +97,7 @@ services:
       - "${HTTPS_PORT}"
     working_dir: /var/www/html
     volumes:
+      - ./sockets/php:/run/php
       - ./openresty.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - webserver_data:/etc/nginx/conf.d
       - html_data:/var/www/html/   
@@ -126,6 +126,7 @@ services:
       - "${HTTPS_PORT}"
     working_dir: /var/www/html
     volumes:
+      - ./sockets/php:/run/php
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - webserver_data:/etc/nginx/conf.d
       - html_data:/var/www/html/   
@@ -155,6 +156,7 @@ services:
       - "${HTTPS_PORT}"
     working_dir: /var/www/html
     volumes:
+      - ./sockets/php:/run/php
       - ./httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
       - webserver_data:/etc/httpd/conf.d/
       - html_data:/var/www/html/
@@ -515,26 +517,23 @@ services:
 
 
   php-fpm-5.6:
-    image: shinsenter/php:5.6-fpm
+    image: openpanel/php-fpm:5.6
     container_name: php-fpm-5.6
     healthcheck:
       disable: true
     hostname: php-fpm-5.6
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/5.6.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/5.6.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_5.6.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -544,29 +543,25 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root  
 
   php-fpm-7.0:
-    image: shinsenter/php:7.0-fpm
+    image: openpanel/php-fpm:7.0
     container_name: php-fpm-7.0
     healthcheck:
       disable: true
     hostname: php-fpm-7.0
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/7.0.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/7.0.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.0.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -576,29 +571,25 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root 
       
   php-fpm-7.1:
-    image: shinsenter/php:7.1-fpm
+    image: openpanel/php-fpm:7.1
     container_name: php-fpm-7.1
     healthcheck:
       disable: true
     hostname: php-fpm-7.1
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/7.1.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/7.1.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.1.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro      
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -608,30 +599,26 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root 
       
 
   php-fpm-7.2:
-    image: shinsenter/php:7.2-fpm
+    image: openpanel/php-fpm:7.2
     container_name: php-fpm-7.2
     healthcheck:
       disable: true
     hostname: php-fpm-7.2
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/7.2.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/7.2.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.2.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -641,31 +628,27 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
       
 
 
   php-fpm-7.3:
-    image: shinsenter/php:7.3-fpm
+    image: openpanel/php-fpm:7.3
     container_name: php-fpm-7.3
     healthcheck:
       disable: true
     hostname: php-fpm-7.3
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/7.3.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/7.3.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.3.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -675,30 +658,26 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
       
 
   php-fpm-7.4:
-    image: shinsenter/php:7.4-fpm
+    image: openpanel/php-fpm:7.4
     container_name: php-fpm-7.4
     healthcheck:
       disable: true
     hostname: php-fpm-7.4
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/7.4.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/7.4.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_7.4.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -708,27 +687,23 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
       
   php-fpm-8.0:
-    image: shinsenter/php:8.0-fpm
+    image: openpanel/php-fpm:8.0
     container_name: php-fpm-8.0
     healthcheck:
       disable: true
     hostname: php-fpm-8.0
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.0.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.0.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -738,31 +713,27 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
    
       
 
   php-fpm-8.1:
-    image: shinsenter/php:8.1-fpm
+    image: openpanel/php-fpm:8.1
     container_name: php-fpm-8.1
     healthcheck:
       disable: true
     hostname: php-fpm-8.1
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.1.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.1.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.1.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -772,31 +743,27 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
   
 
       
   php-fpm-8.2:
-    image: shinsenter/php:8.2-fpm
+    image: openpanel/php-fpm:8.2
     container_name: php-fpm-8.2
     healthcheck:
       disable: true
     hostname: php-fpm-8.2
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.2.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.2.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.2.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -806,30 +773,26 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
       
 
   php-fpm-8.3:
-    image: shinsenter/php:8.3-fpm
+    image: openpanel/php-fpm:8.3
     container_name: php-fpm-8.3
     healthcheck:
       disable: true
     hostname: php-fpm-8.3
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.3.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.3.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.3.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro      
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -839,29 +802,25 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
       
   php-fpm-8.4:
-    image: shinsenter/php:8.4-fpm
+    image: openpanel/php-fpm:8.4
     container_name: php-fpm-8.4
     healthcheck:
       disable: true
     hostname: php-fpm-8.4
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.4.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.4.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.4.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -871,31 +830,27 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
 
 
      
   php-fpm-8.5:
-    image: shinsenter/php:8.5-fpm
+    image: openpanel/php-fpm:8.5
     container_name: php-fpm-8.5
     healthcheck:
       disable: true
     hostname: php-fpm-8.5
     restart: unless-stopped
+    environment:
+      - PHPFPM_LISTEN=${PHP_FPM_LISTEN:-port}
+      - PHPFPM_PM=${PHP_FPM_PM:-ondemand}
     volumes:
+      - ./sockets/php:/run/php
       - html_data:/var/www/html/
       - ./sockets/mysqld:/var/run/mysqld
       - ./php.ini/8.5.ini:/usr/local/etc/php/php.ini
-      - ./php.ini/8.5.ini:/usr/local/etc/php/conf.d/zz-docker-shinsenter-php.ini:ro
       - /etc/openpanel/wordpress/wp-cli.phar:/usr/local/bin/wp:ro
-      - /etc/openpanel/php/fpm-tuning.sh:/etc/hooks/bootstrap/05-openpanel-fpm-tuning:ro
       - /etc/openpanel/php/ioncube/ioncube_loader_lin_8.5.so:/usr/local/lib/php/extensions/ioncube_loader.so:ro
       - /etc/openpanel/php/ioncube_extension.ini:/usr/local/etc/php/conf.d/docker-php-ext-ioncube.ini:ro
-    environment:
-      - APP_USER=root
-      - APP_GROUP=root
-      - APP_UID=${USER_ID:-0}
-      - APP_GID=${USER_ID:-0}
     deploy:
       resources:
         limits:
@@ -905,7 +860,6 @@ services:
     networks:
       - www
       - db
-    command: php-fpm --allow-to-run-as-root
 
   mongodb:
     image: mongo:${MONGODB_VERSION:-latest}
